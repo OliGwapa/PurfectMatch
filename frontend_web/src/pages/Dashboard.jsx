@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import "../styles/home.css";
 import Banner from '../components/Banner';
+import Sidebar from '../components/sidebar-c/Sidebar';
 import { Home, Search, Bell, Mail, Settings, User, Plus, LogOut, Moon, Sun, Trash2, Calendar, MessageSquare, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
@@ -202,6 +203,7 @@ export default function Dashboard() {
   };
 
   const handlePetClick = (pet) => {
+    console.log('Selected pet data:', pet);
     setSelectedPet(pet);
   };
 
@@ -216,47 +218,11 @@ export default function Dashboard() {
       <Banner firstName={userDetails.fullName.split(' ')[0]} />
 
       <div className="main-content">
-        <div className="sidebar">
-          <div className="sidebar-content">
-            <div className="sidebar-section">
-              <h4>Menu</h4>
-              <Link to="/dashboard"><Home size={20} /> Home</Link>
-              <a onClick={() => setShowSearch(!showSearch)} style={{ cursor: 'pointer' }}>
-                <Search size={20} /> Search
-              </a>
-              <Link to="/notifications"><Bell size={20} /> Notifications</Link>
-              <Link to="/messages"><Mail size={20} /> Messages</Link>
-              <Link to="/bookings"><Calendar size={20} /> Bookings</Link>
-            </div>
-
-            <div className="sidebar-section">
-              <h4>Pets</h4>
-              <Link to="/profile"><User size={20} /> Profile</Link>
-              <Link to="/add-pet"><Plus size={20} /> Add Pet</Link>
-            </div>
-
-            <div className="sidebar-section">
-              <h4>Account</h4>
-              <div className="settings-container" ref={settingsRef}>
-                <button className="settings-button" onClick={() => setShowSettings(!showSettings)}>
-                  <Settings size={20} /> Settings
-                </button>
-                {showSettings && (
-                  <div className="settings-popup">
-                    <button className="settings-item" onClick={toggleDarkMode}>
-                      {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-                      {darkMode ? 'Light Mode' : 'Dark Mode'}
-                    </button>
-                    <button className="settings-item delete-account" onClick={handleDeleteAccount}>
-                      <Trash2 size={16} /> Delete Account
-                    </button>
-                  </div>
-                )}
-              </div>
-              <a onClick={handleLogout} style={{ cursor: 'pointer' }}><LogOut size={20} /> Logout</a>
-            </div>
-          </div>
-        </div>
+        <Sidebar 
+          activeItem="dashboard" 
+          onLogout={handleLogout} 
+          onSearchToggle={() => setShowSearch(!showSearch)}
+        />
 
         <div className="center-content">
           <div className="feed-header">
@@ -334,8 +300,66 @@ export default function Dashboard() {
                 />
                 <p><strong>Breed:</strong> {selectedPet.breed}</p>
                 <p><strong>Description:</strong> {selectedPet.description}</p>
-                <p><strong>Price:</strong> ${selectedPet.price}</p>
-                <p><strong>Availability:</strong> {selectedPet.availabilityStatus}</p>
+                <p><strong>Price:</strong> ${selectedPet.price || 'Not specified'}</p>
+                <p><strong>Availability:</strong> {selectedPet.availabilityStatus || 'Not specified'}</p>
+                
+                {/* Pedigree Information */}
+                {selectedPet.pedigreeInfo && (
+                  <div className="modal-section">
+                    <p><strong>Pedigree Information:</strong></p>
+                    <img
+                      src={selectedPet.pedigreeInfo}
+                      alt="Pedigree Information"
+                      className="modal-document-image"
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                        marginTop: '8px'
+                      }}
+                      onError={(e) => {
+                        console.error('Error loading pedigree image:', selectedPet.pedigreeInfo);
+                        e.target.style.display = 'none';
+                        // Show fallback text instead
+                        const fallback = document.createElement('p');
+                        fallback.textContent = 'Pedigree information available but image could not be loaded.';
+                        fallback.style.fontStyle = 'italic';
+                        fallback.style.color = '#666';
+                        e.target.parentNode.appendChild(fallback);
+                      }}
+                    />
+                  </div>
+                )}
+                
+                {/* Health Status */}
+                {selectedPet.healthStatus && (
+                  <div className="modal-section">
+                    <p><strong>Health Status:</strong></p>
+                    <img
+                      src={selectedPet.healthStatus}
+                      alt="Health Status Certificate"
+                      className="modal-document-image"
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                        marginTop: '8px'
+                      }}
+                      onError={(e) => {
+                        console.error('Error loading health status image:', selectedPet.healthStatus);
+                        e.target.style.display = 'none';
+                        // Show fallback text instead
+                        const fallback = document.createElement('p');
+                        fallback.textContent = 'Health status information available but image could not be loaded.';
+                        fallback.style.fontStyle = 'italic';
+                        fallback.style.color = '#666';
+                        e.target.parentNode.appendChild(fallback);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
               <div className="modal-footer">
                 <button

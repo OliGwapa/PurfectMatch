@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import "../styles/AddPet.css";
 import Banner from '../components/Banner';
-import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut, Camera } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import Sidebar from '../components/sidebar-c/Sidebar';
+import { Camera } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
@@ -31,6 +32,8 @@ export default function AddPet() {
   const [photoFile, setPhotoFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [pedigreeFile, setPedigreeFile] = useState(null);
+  const [healthFile, setHealthFile] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,6 +78,64 @@ export default function AddPet() {
     }
   };
 
+  const handlePedigreeFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!validTypes.includes(file.type)) {
+        setError("Please upload a JPEG, PNG image or PDF file for pedigree information.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size exceeds 5MB limit.");
+        return;
+      }
+      setPedigreeFile(file);
+      setError(null);
+    }
+  };
+
+  const handleHealthFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!validTypes.includes(file.type)) {
+        setError("Please upload a JPEG, PNG image or PDF file for health status.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size exceeds 5MB limit.");
+        return;
+      }
+      setHealthFile(file);
+      setError(null);
+    }
+  };
+
+  const uploadDocument = async (file, petId, documentType) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    // Use existing photo upload endpoint
+    const response = await fetch(
+      `http://localhost:8080/pets/${petId}/photos`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        body: formData
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error(`Failed to upload ${documentType} document`);
+    }
+    
+    const result = await response.json();
+    return result.url; // Return the URL of the uploaded document
+  };
+
   const handleCancel = () => {
     navigate("/profile");
   };
@@ -96,30 +157,31 @@ export default function AddPet() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-  
+
     if (!petData.name || !petData.breed || !petData.gender) {
       setError("Please fill in at least Name, Breed, and Gender!");
       return;
     }
-  
+
     if (!token) {
       navigate("/login");
       return;
     }
-  
+
     setIsLoading(true);
     setError(null);
-  
+
     try {
       const weightValue = petData.weight ? parseFloat(petData.weight) : null;
       const priceValue = petData.price ? parseFloat(petData.price) : null;
       const formattedDate = petData.dateOfBirth ? new Date(petData.dateOfBirth).toISOString() : null;
 
-      const createResponse = await fetch(`${import.meta.env.VITE_API_URL}/pets/create`, {
+      // First, create the pet
+      const createResponse = await fetch("http://localhost:8080/pets/create", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           name: petData.name,
@@ -132,24 +194,26 @@ export default function AddPet() {
           description: petData.description,
           availabilityStatus: petData.availabilityStatus,
           price: priceValue,
-          pedigreeInfo: petData.pedigreeInfo,
-          healthStatus: petData.healthStatus
+          pedigreeInfo: petData.pedigreeInfo, // Will be updated with URL later
+          healthStatus: petData.healthStatus   // Will be updated with URL later
         })
       });
-  
+
       if (!createResponse.ok) {
         const errorData = await createResponse.json();
         throw new Error(errorData.message || "Failed to create pet");
       }
-  
+
       const createdPet = await createResponse.json();
-  
-      if (photoFile) {
+      console.log("Created pet:", createdPet);
+
+      // Upload main pet photo if provided
+      if (photoFile && createdPet.petId) {
         const formData = new FormData();
         formData.append("file", photoFile);
-  
+
         const photoResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/pets/${createdPet.petId}/photos`,
+          `http://localhost:8080/pets/${createdPet.petId}/photos`,
           {
             method: "POST",
             headers: {
@@ -158,14 +222,60 @@ export default function AddPet() {
             body: formData
           }
         );
-  
+
         if (!photoResponse.ok) {
           throw new Error("Failed to upload pet photo");
         }
       }
-  
+
+      // Upload pedigree and health documents and update pet record
+      let pedigreeUrl = petData.pedigreeInfo;
+      let healthUrl = petData.healthStatus;
+
+      if (pedigreeFile) {
+        pedigreeUrl = await uploadDocument(pedigreeFile, createdPet.petId, 'pedigree');
+      }
+
+      if (healthFile) {
+        healthUrl = await uploadDocument(healthFile, createdPet.petId, 'health');
+      }
+
+      // Update pet record with document URLs if any documents were uploaded
+      if (pedigreeFile || healthFile) {
+        const updateResponse = await fetch(
+          `http://localhost:8080/pets/update/${createdPet.petId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              name: petData.name,
+              species: petData.species,
+              breed: petData.breed,
+              gender: petData.gender,
+              dateOfBirth: formattedDate,
+              weight: weightValue,
+              color: petData.color,
+              description: petData.description,
+              availabilityStatus: petData.availabilityStatus,
+              price: priceValue,
+              pedigreeInfo: pedigreeUrl,
+              healthStatus: healthUrl
+            })
+          }
+        );
+
+        if (!updateResponse.ok) {
+          console.warn("Failed to update pet with document URLs, but pet was created successfully");
+        }
+      }
+
+      alert("Pet created successfully!");
       navigate("/profile");
     } catch (err) {
+      console.error("Error in handleSave:", err);
       setError(err.message);
     } finally {
       setIsLoading(false);
@@ -178,28 +288,7 @@ export default function AddPet() {
 
       <div className="main-content">
         {/* Consolidated Left Sidebar */}
-        <div className="sidebar">
-          <div className="sidebar-section">
-            <h4>Menu</h4>
-            <Link to="/dashboard"><Home size={20} /> Home</Link>
-            <Link to="/search"><Search size={20} /> Search</Link>
-            <Link to="/notifications"><Bell size={20} /> Notifications</Link>
-            <Link to="/messages"><Mail size={20} /> Messages</Link>
-          </div>
-          
-          <div className="sidebar-section">
-            <h4>Pets</h4>
-            <Link to="/profile"><User size={20} /> Profile</Link>
-            <Link to="/pet-list"><List size={20} /> My Pet List</Link>
-            <Link to="/add-pet" className="active"><Plus size={20} /> Add Pet</Link>
-          </div>
-          
-          <div className="sidebar-section">
-            <h4>Account</h4>
-            <Link to="/settings"><Settings size={20} /> Settings</Link>
-            <a onClick={handleLogout} style={{cursor: 'pointer'}}><LogOut size={20} /> Logout</a>
-          </div>
-        </div>
+        <Sidebar activeItem="add-pet" onLogout={handleLogout} />
 
         {/* Expanded Center Content */}
         <div className="center-content expanded">
@@ -419,26 +508,66 @@ export default function AddPet() {
                   <div className="form-row">
                     <div className="form-group">
                       <label>Pedigree Information</label>
-                      <input 
-                        type="text" 
-                        name="pedigreeInfo" 
-                        value={petData.pedigreeInfo} 
-                        onChange={handleInputChange} 
+                      <input
+                        type="file"
+                        id="pedigree-upload"
+                        accept="image/*,.pdf"
+                        onChange={handlePedigreeFileChange}
+                        style={{ display: 'none' }}
                         disabled={isLoading}
-                        placeholder="e.g. AKC registered"
                       />
+                      <label htmlFor="pedigree-upload" className="file-upload-label">
+                        {pedigreeFile ? (
+                          <div className="file-preview">
+                            <span>{pedigreeFile.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => setPedigreeFile(null)}
+                              className="remove-file-btn"
+                              disabled={isLoading}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="upload-placeholder-small">
+                            <span>📄 Upload Pedigree Document</span>
+                          </div>
+                        )}
+                      </label>
+                      <small className="file-help">JPEG, PNG, or PDF files, max 5MB</small>
                     </div>
 
                     <div className="form-group">
                       <label>Health Status</label>
-                      <input 
-                        type="text" 
-                        name="healthStatus" 
-                        value={petData.healthStatus} 
-                        onChange={handleInputChange} 
+                      <input
+                        type="file"
+                        id="health-upload"
+                        accept="image/*,.pdf"
+                        onChange={handleHealthFileChange}
+                        style={{ display: 'none' }}
                         disabled={isLoading}
-                        placeholder="e.g. Vaccinated and healthy"
                       />
+                      <label htmlFor="health-upload" className="file-upload-label">
+                        {healthFile ? (
+                          <div className="file-preview">
+                            <span>{healthFile.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => setHealthFile(null)}
+                              className="remove-file-btn"
+                              disabled={isLoading}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="upload-placeholder-small">
+                            <span>🏥 Upload Health Certificate</span>
+                          </div>
+                        )}
+                      </label>
+                      <small className="file-help">JPEG, PNG, or PDF files, max 5MB</small>
                     </div>
                   </div>
 

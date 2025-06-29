@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import "../styles/UserProfile.css";
 import Banner from '../components/Banner';
+import Sidebar from '../components/sidebar-c/Sidebar';
 import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import defaultProfile from '../assets/defaultprofileimage.png';
-
+ 
 export default function UserProfile() {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
@@ -21,7 +22,7 @@ export default function UserProfile() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [petsLoading, setPetsLoading] = useState(false);
-
+ 
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem("token");
@@ -29,18 +30,18 @@ export default function UserProfile() {
         navigate("/login");
         return;
       }
-
+ 
       setLoading(true);
       setError(null);
-
+ 
       try {
-        const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me`, {
+        const profileResponse = await fetch("http://localhost:8080/users/me", {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-
+ 
         if (!profileResponse.ok) {
           if (profileResponse.status === 401) {
             localStorage.removeItem("token");
@@ -50,7 +51,7 @@ export default function UserProfile() {
           const errorData = await profileResponse.json();
           throw new Error(errorData.message || "Failed to fetch user profile");
         }
-
+ 
         const userProfile = await profileResponse.json();
         setUserDetails({
           userId: userProfile.user?.userID || '',
@@ -60,7 +61,7 @@ export default function UserProfile() {
           address: userProfile.user?.address || '',
           profileImage: userProfile.user?.profilePicture || defaultProfile
         });
-
+ 
       } catch (err) {
         console.error("Error fetching profile:", err);
         setError(err.message);
@@ -68,24 +69,24 @@ export default function UserProfile() {
         setLoading(false);
       }
     };
-
+ 
     fetchUserProfile();
   }, [navigate]);
-
+ 
   useEffect(() => {
     const fetchUserPets = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
-
+ 
       setPetsLoading(true);
       try {
-        const petsResponse = await fetch(`${import.meta.env.VITE_API_URL}/pets/my-pets`, {
+        const petsResponse = await fetch("http://localhost:8080/pets/my-pets", {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-
+ 
         if (!petsResponse.ok) {
           if (petsResponse.status === 401) {
             localStorage.removeItem("token");
@@ -95,14 +96,14 @@ export default function UserProfile() {
           const errorData = await petsResponse.json();
           throw new Error(errorData.message || "Failed to fetch user pets");
         }
-
+ 
         const petsData = await petsResponse.json();
-        
+       
         const petsWithPhotos = await Promise.all(
           petsData.map(async (pet) => {
             try {
               const photosResponse = await fetch(
-                `${import.meta.env.VITE_API_URL}/pets/${pet.petId}/photos`,
+                "http://localhost:8080/pets/${pet.petId}/photos",
                 {
                   headers: {
                     'Authorization': `Bearer ${token}`,
@@ -110,11 +111,11 @@ export default function UserProfile() {
                   }
                 }
               );
-
+ 
               if (!photosResponse.ok) {
                 return { ...pet, photo: defaultProfile };
               }
-
+ 
               const photosData = await photosResponse.json();
               return {
                 ...pet,
@@ -125,7 +126,7 @@ export default function UserProfile() {
             }
           })
         );
-
+ 
         setUserPets(petsWithPhotos);
       } catch (err) {
         console.error("Error fetching pets:", err);
@@ -134,14 +135,14 @@ export default function UserProfile() {
         setPetsLoading(false);
       }
     };
-
+ 
     fetchUserPets();
   }, [navigate]);
-
+ 
   const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (!confirmLogout) return;
-
+ 
     try {
       await signOut(auth);
       localStorage.clear();
@@ -152,32 +153,32 @@ export default function UserProfile() {
       alert("Logout failed. Please try again.");
     }
   };
-
+ 
   const handleDeletePet = async (petId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this pet?");
     if (!confirmDelete) return;
-
+ 
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
-
+ 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pets/delete/${petId}`, {
+      const response = await fetch(`http://localhost:8080/pets/delete/${petId}`, {
         method: "DELETE",
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-
+ 
       const data = await response.json();
-      
+     
       if (!response.ok) {
         throw new Error(data.message || "Failed to delete pet");
       }
-
+ 
       // Remove the deleted pet from state
       setUserPets(userPets.filter(pet => pet.petId !== petId));
       alert(data.message || "Pet deleted successfully");
@@ -187,33 +188,21 @@ export default function UserProfile() {
     }
   };
 
+  const handleSearchToggle = () => {
+    navigate('/dashboard');
+  };
+ 
   return (
     <div className="home-wrapper">
       <Banner firstName={userDetails.fullName.split(' ')[0] || 'User'} onLogout={handleLogout} />
-
+ 
       <div className="main-content">
-        <div className="sidebar">
-          <div className="sidebar-section">
-            <h4>Menu</h4>
-            <Link to="/dashboard"><Home size={20} /> Home</Link>
-            <Link to="/search"><Search size={20} /> Search</Link>
-            <Link to="/notifications"><Bell size={20} /> Notifications</Link>
-            <Link to="/messages"><Mail size={20} /> Messages</Link>
-          </div>
-          
-          <div className="sidebar-section">
-            <h4>Pets</h4>
-            <Link to="/profile" className="active"><User size={20} /> Profile</Link>
-            <Link to="/add-pet"><Plus size={20} /> Add Pet</Link>
-          </div>
-          
-          <div className="sidebar-section">
-            <h4>Account</h4>
-            <Link to="/settings"><Settings size={20} /> Settings</Link>
-            <a onClick={handleLogout} style={{cursor: 'pointer'}}><LogOut size={20} /> Logout</a>
-          </div>
-        </div>
-
+        <Sidebar 
+          activeItem="profile" 
+          onLogout={handleLogout} 
+          onSearchToggle={handleSearchToggle}
+        />
+ 
         <div className="center-content expanded">
           {loading ? (
             <div className="loading-spinner">Loading profile...</div>
@@ -250,7 +239,7 @@ export default function UserProfile() {
                   </div>
                 </div>
               </div>
-
+ 
               <div className="pets-section">
                 <div className="section-header">
                   <h3>My Pets</h3>
@@ -258,7 +247,7 @@ export default function UserProfile() {
                     <Plus size={18} /> Add Pet
                   </Link>
                 </div>
-
+ 
                 {petsLoading ? (
                   <div className="loading-spinner">Loading pets...</div>
                 ) : userPets.length > 0 ? (
@@ -284,13 +273,13 @@ export default function UserProfile() {
                           {pet.age && <div className="pet-age">{pet.age} years old</div>}
                         </div>
                         <div className="pet-actions">
-                          <button 
+                          <button
                             className="edit-pet-btn"
                             onClick={() => navigate(`/edit-pet/${pet.petId}`)}
                           >
                             Edit
                           </button>
-                          <button 
+                          <button
                             className="delete-pet-btn"
                             onClick={() => handleDeletePet(pet.petId)}
                           >

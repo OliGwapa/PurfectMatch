@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import "../styles/UserProfile.css";
 import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
-import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
 import defaultProfile from '../assets/defaultprofileimage.png';
  
 export default function UserProfile() {
+  const { handleLogout, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     userId: '',
@@ -139,21 +139,6 @@ export default function UserProfile() {
     fetchUserPets();
   }, [navigate]);
  
-  const handleLogout = async () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
- 
-    try {
-      await signOut(auth);
-      localStorage.clear();
-      alert("You have logged out successfully!");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed: ", error);
-      alert("Logout failed. Please try again.");
-    }
-  };
- 
   const handleDeletePet = async (petId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this pet?");
     if (!confirmDelete) return;
@@ -194,14 +179,10 @@ export default function UserProfile() {
  
   return (
     <div className="home-wrapper">
-      <Banner firstName={userDetails.fullName.split(' ')[0] || 'User'} onLogout={handleLogout} />
+      <Banner firstName={userDetails.fullName.split(' ')[0]} />
  
       <div className="main-content">
-        <Sidebar 
-          activeItem="profile" 
-          onLogout={handleLogout} 
-          onSearchToggle={handleSearchToggle}
-        />
+        <Sidebar activeItem="profile" onLogout={handleLogout} onSearchToggle={handleSearchToggle}/>
  
         <div className="center-content expanded">
           {loading ? (

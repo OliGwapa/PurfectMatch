@@ -2,9 +2,12 @@ import React from 'react';
 import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut } from 'lucide-react';
 import SidebarLink from './SidebarLink';
 import SidebarSection from './SidebarSection';
+import { useSidebar } from './SidebarContext';
 import './Sidebar.css';
 
 const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
+  const { isCollapsed } = useSidebar();
+
   // Menu items configuration
   const menuItems = [
     { id: 'dashboard', to: '/dashboard', icon: Home, label: 'Home' },
@@ -30,8 +33,8 @@ const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
   ];
 
   return (
-    <div className="sidebar">
-      <SidebarSection title="Menu">
+    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <SidebarSection title="Menu" isCollapsed={isCollapsed}>
         {menuItems.map(item => (
           <SidebarLink
             key={item.id}
@@ -39,32 +42,35 @@ const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
             icon={item.icon}
             isActive={activeItem === item.id}
             onClick={item.onClick}
+            isCollapsed={isCollapsed}
           >
             {item.label}
           </SidebarLink>
         ))}
       </SidebarSection>
       
-      <SidebarSection title="Pets">
+      <SidebarSection title="Pets" isCollapsed={isCollapsed}>
         {petItems.map(item => (
           <SidebarLink
             key={item.id}
             to={item.to}
             icon={item.icon}
             isActive={activeItem === item.id}
+            isCollapsed={isCollapsed}
           >
             {item.label}
           </SidebarLink>
         ))}
       </SidebarSection>
       
-      <SidebarSection title="Account">
+      <SidebarSection title="Account" isCollapsed={isCollapsed}>
         {accountItems.map(item => (
           <SidebarLink
             key={item.id}
             to={item.to}
             icon={item.icon}
             isActive={activeItem === item.id}
+            isCollapsed={isCollapsed}
           >
             {item.label}
           </SidebarLink>
@@ -73,6 +79,7 @@ const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
           icon={LogOut}
           onClick={onLogout}
           isActive={false}
+          isCollapsed={isCollapsed}
         >
           Logout
         </SidebarLink>

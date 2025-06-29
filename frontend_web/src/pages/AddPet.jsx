@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import "../styles/AddPet.css";
 import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
@@ -8,6 +9,7 @@ import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
 export default function AddPet() {
+  const { handleLogout, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
   const firstName = localStorage.getItem("firstName");
   const token = localStorage.getItem("token");
@@ -140,21 +142,6 @@ export default function AddPet() {
     navigate("/profile");
   };
 
-  const handleLogout = async () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
-    try {
-      await signOut(auth);
-      localStorage.clear();
-      alert("You have logged out successfully!");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed: ", error);
-      alert("Logout failed. Please try again.");
-    }
-  };
-
   const handleSave = async (e) => {
     e.preventDefault();
 
@@ -282,13 +269,16 @@ export default function AddPet() {
     }
   };
 
+  const handleSearchToggle = () => {
+    navigate('/dashboard');
+  };
+
   return (
     <div className="home-wrapper">
       <Banner firstName={firstName} onLogout={handleLogout} />
 
       <div className="main-content">
-        {/* Consolidated Left Sidebar */}
-        <Sidebar activeItem="add-pet" onLogout={handleLogout} />
+        <Sidebar activeItem="add-pet" onLogout={handleLogout} onSearchToggle={handleSearchToggle}/>
 
         {/* Expanded Center Content */}
         <div className="center-content expanded">

@@ -50,8 +50,6 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("firstName", data.firstName);
-      console.log(data); // Debug: Check the response data
-      alert("Login successful!");
  
       if(data.role === "ADMIN") {
         navigate("/admin-dashboard");

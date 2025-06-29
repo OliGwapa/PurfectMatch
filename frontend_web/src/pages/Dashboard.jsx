@@ -1,14 +1,21 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import "../styles/home.css";
 import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
-import { Home, Search, Bell, Mail, Settings, User, Plus, LogOut, Moon, Sun, Trash2, Calendar, MessageSquare, X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import PetModal from '../components/PetModal';
+import FeedPetCard from '../components/FeedPetCard';
+import SkeletonCard from '../components/SkeletonCard';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import PetsIcon from '@mui/icons-material/Pets';
+import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import defaultProfile from '../assets/defaultprofileimage.png';
 
 export default function Dashboard() {
+  const { handleLogout, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     fullName: localStorage.getItem("firstName") || '',
@@ -23,6 +30,7 @@ export default function Dashboard() {
   const [size] = useState(20);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
@@ -33,7 +41,6 @@ export default function Dashboard() {
   const observer = useRef(null);
   const loadMoreRef = useRef(null);
   const settingsRef = useRef(null);
-  const modalRef = useRef(null);
 
   useEffect(() => {
     if (darkMode) {
@@ -47,9 +54,6 @@ export default function Dashboard() {
     const handleClickOutside = (event) => {
       if (settingsRef.current && !settingsRef.current.contains(event.target)) {
         setShowSettings(false);
-      }
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setSelectedPet(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -74,49 +78,52 @@ export default function Dashboard() {
     });
   }, [navigate]);
 
-  const fetchPets = useCallback(async (pageToFetch) => {
-    if (loading || !hasMore) return;
+const fetchPets = useCallback(async (pageToFetch) => {
+  if (loading || !hasMore) return;
 
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No authentication token found");
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No authentication token found");
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pets/feed?page=${pageToFetch}&size=${size}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/login");
-          throw new Error("Session expired. Please log in again.");
-        }
-        throw new Error(errorData.message || "Failed to fetch pet feed");
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/pets/feed?page=${pageToFetch}&size=${size}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
+    });
 
-      const data = await response.json();
-      setPets((prevPets) => {
-        const existingIds = new Set(prevPets.map((pet) => pet.petId));
-        const newPets = data.filter((pet) => !existingIds.has(pet.petId));
-        return [...prevPets, ...newPets];
-      });
-
-      setHasMore(data.length === size);
-      setPage(pageToFetch + 1);
-    } catch (err) {
-      console.error("Error fetching pets:", err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+        throw new Error("Session expired. Please log in again.");
+      }
+      throw new Error(errorData.message || "Failed to fetch pet feed");
     }
-  }, [size, loading, hasMore, navigate]);
+
+    const data = await response.json();
+    setPets((prevPets) => {
+      const existingIds = new Set(prevPets.map((pet) => pet.petId));
+      const newPets = data.filter((pet) => !existingIds.has(pet.petId));
+      return [...prevPets, ...newPets];
+    });
+
+    setHasMore(data.length === size);
+    setPage(pageToFetch + 1);
+  } catch (err) {
+    console.error("Error fetching pets:", err);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+    if (pageToFetch === 0) {
+      setInitialLoading(false);
+    }
+  }
+}, [size, loading, hasMore, navigate]);
 
   useEffect(() => {
     fetchPets(0);
@@ -189,22 +196,13 @@ export default function Dashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
-    try {
-      await signOut(auth);
-      localStorage.clear();
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed: ", error);
-    }
-  };
-
   const handlePetClick = (pet) => {
     console.log('Selected pet data:', pet);
     setSelectedPet(pet);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPet(null);
   };
 
   const filteredPets = pets.filter(pet =>
@@ -218,166 +216,75 @@ export default function Dashboard() {
       <Banner firstName={userDetails.fullName.split(' ')[0]} />
 
       <div className="main-content">
-        <Sidebar 
-          activeItem="dashboard" 
-          onLogout={handleLogout} 
-          onSearchToggle={() => setShowSearch(!showSearch)}
-        />
+        <Sidebar activeItem="dashboard" onLogout={handleLogout} onSearchToggle={() => setShowSearch(!showSearch)}/>
 
         <div className="center-content">
           <div className="feed-header">
-            <h2>Pet Feed</h2>
+            <h2>
+              <PetsIcon sx={{ position: 'relative', top: '2px', color: '#7C715E', marginRight: '8px' }} />
+              Pet Feed
+            </h2>
           </div>
 
           {showSearch && (
-            <div className="search-bar" style={{ marginBottom: '20px' }}>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search pets by name, breed, or species..."
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '14px'
-                }}
-              />
-            </div>
+            <TextField
+              fullWidth
+              variant="outlined"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              label="Search pets by name, breed, or species..."
+              sx={{
+                marginBottom: '20px',
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#7C715E',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#7C715E',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#7C715E',
+                  },
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#7C715E',
+                  '&.Mui-focused': {
+                    color: '#7C715E',
+                  },
+                },
+              }}
+            />
           )}
 
           {error && <p className="error">{error}</p>}
-          {!loading && pets.length === 0 && !error && <p>No pets available.</p>}
+          {!initialLoading && !loading && pets.length === 0 && !error && <p>No pets available.</p>}
 
           <div className="pet-feed-grid">
-            {(showSearch ? filteredPets : pets).map((pet) => (
-              <div
-                className="pet-card"
-                key={pet.petId}
-                onClick={() => handlePetClick(pet)}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="pet-image-container">
-                  <img
-                    src={pet.photoUrl || defaultProfile}
-                    alt={pet.name}
-                    className="pet-image"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="pet-info">
-                  <h3>{pet.name}</h3>
-                  <p>{pet.species} - {pet.breed}</p>
-                  <p className="pet-description">{pet.description}</p>
-                </div>
-              </div>
-            ))}
+            {initialLoading ? (
+              Array.from({ length: 8 }).map((_, index) => (
+                <SkeletonCard key={`skeleton-${index}`} />
+              ))
+            ) : (
+              (showSearch ? filteredPets : pets).map((pet) => (
+                <FeedPetCard key={pet.petId} pet={pet} onClick={handlePetClick} />
+              ))
+            )}
           </div>
 
-          {loading && <p className="loading">Loading...</p>}
-          {!hasMore && pets.length > 0 && (
+          {loading && !initialLoading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100px' }}>
+              <CircularProgress sx={{ color: '#E5D0AC' }} />
+            </Box>
+          )}
+
+          {!hasMore && pets.length > 0 && !initialLoading && (
             <p className="end-message">No more pets to show</p>
           )}
 
           <div ref={loadMoreRef} style={{ height: '20px' }} />
         </div>
 
-        {selectedPet && (
-          <div className="modal-overlay">
-            <div className="modal-content" ref={modalRef}>
-              <div className="modal-header">
-                <h3>{selectedPet.name}</h3>
-                <button onClick={() => setSelectedPet(null)} className="close-button">
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="modal-body">
-                <img
-                  src={selectedPet.photoUrl || defaultProfile}
-                  alt={selectedPet.name}
-                  className="modal-pet-image"
-                />
-                <p><strong>Breed:</strong> {selectedPet.breed}</p>
-                <p><strong>Description:</strong> {selectedPet.description}</p>
-                <p><strong>Price:</strong> ${selectedPet.price || 'Not specified'}</p>
-                <p><strong>Availability:</strong> {selectedPet.availabilityStatus || 'Not specified'}</p>
-                
-                {/* Pedigree Information */}
-                {selectedPet.pedigreeInfo && (
-                  <div className="modal-section">
-                    <p><strong>Pedigree Information:</strong></p>
-                    <img
-                      src={selectedPet.pedigreeInfo}
-                      alt="Pedigree Information"
-                      className="modal-document-image"
-                      style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                        border: '1px solid #ddd',
-                        borderRadius: '4px',
-                        marginTop: '8px'
-                      }}
-                      onError={(e) => {
-                        console.error('Error loading pedigree image:', selectedPet.pedigreeInfo);
-                        e.target.style.display = 'none';
-                        // Show fallback text instead
-                        const fallback = document.createElement('p');
-                        fallback.textContent = 'Pedigree information available but image could not be loaded.';
-                        fallback.style.fontStyle = 'italic';
-                        fallback.style.color = '#666';
-                        e.target.parentNode.appendChild(fallback);
-                      }}
-                    />
-                  </div>
-                )}
-                
-                {/* Health Status */}
-                {selectedPet.healthStatus && (
-                  <div className="modal-section">
-                    <p><strong>Health Status:</strong></p>
-                    <img
-                      src={selectedPet.healthStatus}
-                      alt="Health Status Certificate"
-                      className="modal-document-image"
-                      style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                        border: '1px solid #ddd',
-                        borderRadius: '4px',
-                        marginTop: '8px'
-                      }}
-                      onError={(e) => {
-                        console.error('Error loading health status image:', selectedPet.healthStatus);
-                        e.target.style.display = 'none';
-                        // Show fallback text instead
-                        const fallback = document.createElement('p');
-                        fallback.textContent = 'Health status information available but image could not be loaded.';
-                        fallback.style.fontStyle = 'italic';
-                        fallback.style.color = '#666';
-                        e.target.parentNode.appendChild(fallback);
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button
-                  onClick={() => navigate('/booking', { state: { petId: selectedPet.petId, petName: selectedPet.name } })}
-                  className="modal-button"
-                >
-                  <Calendar size={16} /> Book
-                </button>
-                <button
-                  onClick={() => navigate(`/messages/${selectedPet.userId}`)}
-                  className="modal-button"
-                >
-                  <MessageSquare size={16} /> Chat
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <PetModal pet={selectedPet} onClose={handleCloseModal} />
       </div>
     </div>
   );

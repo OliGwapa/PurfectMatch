@@ -4,6 +4,7 @@ html, body, #root {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .home-wrapper {
@@ -15,18 +16,23 @@ html, body, #root {
 }
 
 .main-content {
+  position: relative;
   display: flex;
   flex: 1;
   overflow: hidden;
+  z-index: 1;
 }
 
-.sidebar {
-  width: 250px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-right: 1px solid #e2e8f0;
-  flex-shrink: 0;
-  overflow: hidden;
+.main-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/background2.jpg");
+  background-repeat: repeat;
+  background-size: 250px 250px;
+  background-position: center;
+  opacity: 0.2;
+  z-index: -1;
 }
 
 .center-content {
@@ -36,32 +42,9 @@ html, body, #root {
   -webkit-overflow-scrolling: touch;
 }
 
-.sidebar-section {
-  margin-bottom: 20px;
-}
-
-.sidebar-section h4 {
-  margin: 0 0 10px 0;
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  margin-bottom: 5px;
-  border-radius: 6px;
-  color: #334155;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.sidebar a:hover {
-  background-color: #f1f5f9;
+.feed-header h2 {
+  margin-top: 0;
+  color: #524a3e;
 }
 
 /* Pet Feed Styles */
@@ -104,13 +87,17 @@ html, body, #root {
 
 .pet-info h3 {
   margin: 0 0 5px 0;
-  color: #1e293b;
+  color: #524a3e;
 }
 
 .pet-info p {
   margin: 4px 0;
   font-size: 14px;
   color: #475569;
+}
+
+.end-message {
+  text-align: center;
 }
 
 /* Settings Popup Styles */
@@ -249,17 +236,6 @@ html, body, #root {
 
 .modal-button:hover {
   background-color: #357abd;
-}
-
-/* Search Bar */
-.search-bar input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #cbd5e1;
-  font-size: 14px;
-  background-color: #ffffff;
-  color: #1e293b;
 }
 
 /* DARK MODE SUPPORT */

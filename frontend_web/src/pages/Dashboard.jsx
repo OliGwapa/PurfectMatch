@@ -88,7 +88,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No authentication token found");
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/pets/feed?page=${pageToFetch}&size=${size}`, {
+    const response = await fetch(`http://localhost:8080/pets/feed?page=${pageToFetch}&size=${size}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -221,7 +221,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
         <div className="center-content">
           <div className="feed-header">
             <h2>
-              <PetsIcon sx={{ position: 'relative', top: '2px', color: '#7C715E', marginRight: '8px' }} />
+              <PetsIcon sx={{ position: 'relative', top: '2px', marginRight: '8px' }} />
               Pet Feed
             </h2>
           </div>

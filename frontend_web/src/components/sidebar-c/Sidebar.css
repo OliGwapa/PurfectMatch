@@ -87,7 +87,8 @@
 }
 
 .sidebar a:hover {
-  background: #e9ecef;
+  background: #f4f7fa;
+  color: #c05621;
 }
 
 .sidebar a.active {

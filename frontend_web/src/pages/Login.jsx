@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
 import "../styles/login.css";
 import logo from "../assets/Logo1.png";
+import { Link } from 'react-router-dom';
  
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -107,7 +108,7 @@ export default function Login() {
       <div className="left-section">
         <div className="background-overlay"></div>
         <div className="logo-container">
-          <img src={logo} alt="Logo" className="loginsidelogo" />
+          <Link to="/"><img src={logo} alt="Logo" className="loginsidelogo" /></Link>
         </div>
       </div>
  

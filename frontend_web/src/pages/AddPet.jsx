@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useNotifications } from '../hooks/useNotifications';
 import "../styles/AddPet.css";
 import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
@@ -10,6 +11,7 @@ import { signOut } from "firebase/auth";
 
 export default function AddPet() {
   const { handleLogout, checkAuth, getUserDetails } = useAuth();
+  const { alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const firstName = localStorage.getItem("firstName");
   const token = localStorage.getItem("token");
@@ -259,11 +261,11 @@ export default function AddPet() {
         }
       }
 
-      alert("Pet created successfully!");
+      alertSuccess("Pet created successfully!");
       navigate("/profile");
     } catch (err) {
       console.error("Error in handleSave:", err);
-      setError(err.message);
+      alertError(err.message, "Failed to Create Pet");
     } finally {
       setIsLoading(false);
     }
@@ -275,7 +277,7 @@ export default function AddPet() {
 
   return (
     <div className="home-wrapper">
-      <Banner firstName={firstName} onLogout={handleLogout} />
+      <Banner firstName={firstName} />
 
       <div className="main-content">
         <Sidebar activeItem="add-pet" onLogout={handleLogout} onSearchToggle={handleSearchToggle}/>

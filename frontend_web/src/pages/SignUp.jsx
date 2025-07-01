@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import logo from "../assets/Logo1.png";
 import { Link } from "react-router-dom";
+import { useNotifications } from '../hooks/useNotifications';
  
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
+
+  const { confirm, alertSuccess, alertError } = useNotifications();
  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -103,7 +106,7 @@ export default function Signup() {
       throw new Error(data.message || "Signup failed");
     }
    
-    alert("Signup successful! Please log in.");
+    alertSuccess("Signup successful! Please log in.");
     navigate("/login");
   } catch (err) {
     setError(err.message || "Failed to sign up. Please try again.");

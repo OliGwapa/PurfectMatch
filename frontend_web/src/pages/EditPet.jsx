@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNotifications } from '../hooks/useNotifications';
 import { useParams, useNavigate } from 'react-router-dom';
 import "../styles/EditPet.css";
 
 export default function EditPet() {
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const { petId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -249,11 +251,11 @@ export default function EditPet() {
         }
       }
 
-      alert("Pet updated successfully");
+      alertSuccess("Pet updated successfully");
       navigate("/profile");
     } catch (err) {
       console.error("Error updating pet:", err);
-      setError(err.message || "An unexpected error occurred");
+      alertError(err.message || "An unexpected error occurred");
     }
   };
 
@@ -273,13 +275,13 @@ export default function EditPet() {
         setPreviewImage(null);
         setMainPhotoId(null);
         fileInputRef.current.value = null;
-        alert("Photo deleted successfully");
+        alertSuccess("Photo deleted successfully");
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to delete photo");
       }
     } catch (err)      {
-      setError(err.message || "Failed to delete photo");
+      alertError(err.message || "Failed to delete photo");
     }
   };
 

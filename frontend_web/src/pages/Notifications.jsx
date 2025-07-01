@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Check, X } from 'lucide-react';
+import { useNotifications } from '../hooks/useNotifications';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useWebSocket } from './useWebSocket';
@@ -7,6 +8,7 @@ import NotificationPopup from './NotificationPopup';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const token = localStorage.getItem('token');
   let userId = null;
 
@@ -62,7 +64,7 @@ const Notifications = () => {
       setNotifications((prev) => prev.filter((n) => n.link !== bookingId));
     } catch (error) {
       console.error(`Failed to ${action} booking:`, error.response?.data, error.message);
-      alert(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
+      alertSuccess(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
     }
   };
 

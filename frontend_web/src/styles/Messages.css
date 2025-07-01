@@ -1,3 +1,16 @@
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+
 .messages-wrapper {
     display: flex;
     flex-direction: column;
@@ -40,6 +53,20 @@
     flex: 1;
     background-color: #fcfcf7;
   }
+
+  .messages-inner-layout {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  }
+
+  .thread-sidebar {
+    width: 250px;
+    padding: 20px;
+    border-left: 1px solid #eee;
+    background-color: #fff7f2;
+  }
+
   
   /* Sidebar */
   .sidebar-left {

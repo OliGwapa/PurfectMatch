@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import logo from "../assets/Logo1.png";
 import { Link } from "react-router-dom";
-
+ 
 export default function Signup() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -14,15 +14,15 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-
+ 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+ 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+ 
   const validateForm = () => {
     // Required fields check
     for (const key in formData) {
@@ -30,45 +30,45 @@ export default function Signup() {
         return "All fields are required.";
       }
     }
-
+ 
     // Password match
     if (formData.password !== formData.confirmPassword) {
       return "Passwords do not match.";
     }
-
+ 
     // Password regex
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
       return "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.";
     }
-
+ 
     // Email regex
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailRegex.test(formData.email)) {
       return "Email must be valid.";
     }
-
+ 
     // Phone regex
     const phoneRegex = /^\+?[0-9]{10,15}$/;
     if (!phoneRegex.test(formData.phone)) {
       return "Phone number must be valid (10-15 digits, optional + prefix).";
     }
-
+ 
     return ""; // No errors
   };
-
+ 
   const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
   setLoading(true);
-
+ 
   const validationError = validateForm();
   if (validationError) {
     setError(validationError);
     setLoading(false);
     return;
   }
-
+ 
   const requestData = {
     firstName: formData.firstName,
     lastName: formData.lastName,
@@ -79,30 +79,30 @@ export default function Signup() {
     role: "USER", // Add default role
     signUpMethod: "EMAIL" // Add default signUpMethod
   };
-
+ 
   try {
     // Create FormData object
     const formDataToSend = new FormData();
-    
+   
     // Append user data as a JSON blob
     formDataToSend.append(
-      "user", 
-      new Blob([JSON.stringify(requestData)], { 
-        type: "application/json" 
+      "user",
+      new Blob([JSON.stringify(requestData)], {
+        type: "application/json"
       })
     );
-
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+ 
+    const res = await fetch("http://localhost:8080/auth/register", {
       method: "POST",
       body: formDataToSend,
       // Don't set Content-Type header - browser will set it automatically with boundary
     });
-
+ 
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.message || "Signup failed");
     }
-    
+   
     alert("Signup successful! Please log in.");
     navigate("/login");
   } catch (err) {
@@ -111,23 +111,23 @@ export default function Signup() {
     setLoading(false);
   }
   };
-
+ 
   return (
     <div className="login-container">
       <div className="left-section">
         <div className="background-overlay"></div>
         <div className="logo-container">
-          <img src={logo} alt="Logo" className="loginsidelogo" />
+          <Link to="/"><img src={logo} alt="Logo" className="loginsidelogo" /></Link>
         </div>
       </div>
-
+ 
       <div className="right-section">
         <div className="form-container">
           <h2>WELCOME!</h2>
           <p>Please enter your details.</p>
-
+ 
           {error && <p className="error-message">{error}</p>}
-
+ 
           <form onSubmit={handleSubmit} className="login-form">
             <input
               type="text"
@@ -185,14 +185,14 @@ export default function Signup() {
               onChange={handleChange}
               required
             />
-
+ 
             <button type="submit" className="btn" disabled={loading}>
               {loading ? "Signing up..." : "Sign up"}
             </button>
           </form>
-
+ 
           <p>
-            Already have an account? <Link to="/">Sign in here!</Link>
+            Already have an account? <Link to="/login">Sign in here!</Link>
           </p>
         </div>
       </div>

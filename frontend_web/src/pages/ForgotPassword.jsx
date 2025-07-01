@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import logo from "../assets/Logo1.png";
+import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ export default function ForgotPassword() {
       <div className="left-section">
         <div className="background-overlay"></div>
         <div className="logo-container">
-          <img src={logo} alt="Logo" className="logo" />
+          <Link to="/"><img src={logo} alt="Logo" className="loginsidelogo" /></Link>
         </div>
       </div>
 

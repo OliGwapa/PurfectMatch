@@ -65,7 +65,7 @@ export default function PetList() {
       const apiUrl = import.meta.env.VITE_API_URL;
       if (!apiUrl) throw new Error('VITE_API_URL is not defined in .env');
 
-      const response = await fetch(`${apiUrl}/pets/my-pets`, {
+      const response = await fetch(`http://localhost:8080/pets/my-pets`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function PetList() {
       const petsWithPhotos = await Promise.all(
         petsData.map(async (pet) => {
           try {
-            const photoResponse = await fetch(`${apiUrl}/pets/${pet.petId}/photos`, {
+            const photoResponse = await fetch(`http://localhost:8080/pets/${pet.petId}/photos`, {
               headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',

@@ -24,7 +24,7 @@
   
   .greeting {
     font-size: 1rem;
-    color: #000;
+    color: #524a3e;
   }
   
   .signout-button {
@@ -48,7 +48,7 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease;
-    color: #666;
+    color: #524a3e;
   }
 
   .sidebar-toggle-btn:hover {

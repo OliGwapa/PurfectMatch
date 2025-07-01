@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
-import { useSidebar } from '../components/sidebar-c/SidebarContext';
+import { useSidebar } from '../contexts/SidebarContext';
 import './Banner.css';
 import logo from '../assets/Logo1.png';
 import { Link } from 'react-router-dom';

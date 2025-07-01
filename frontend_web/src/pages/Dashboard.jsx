@@ -15,7 +15,7 @@ import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
 export default function Dashboard() {
-  const { handleLogout, checkAuth, getUserDetails } = useAuth();
+  const { handleLogout, handleDeleteAccount, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     fullName: localStorage.getItem("firstName") || '',
@@ -152,50 +152,6 @@ const fetchPets = useCallback(async (pageToFetch) => {
     };
   }, [handleObserver]);
 
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('darkMode', newMode.toString());
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
-    if (!confirmDelete) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/delete/me`, {
-        method: "DELETE",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete account.");
-      }
-
-      const result = await response.json();
-      alert(result.message || "Account deleted successfully");
-
-      await signOut(auth);
-      localStorage.clear();
-      navigate("/login");
-    } catch (err) {
-      console.error("Account deletion failed:", err);
-      alert(err.message || "Account deletion failed.");
-    }
-  };
-
   const handlePetClick = (pet) => {
     console.log('Selected pet data:', pet);
     setSelectedPet(pet);
@@ -234,6 +190,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               label="Search pets by name, breed, or species..."
               sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
                 marginBottom: '20px',
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {

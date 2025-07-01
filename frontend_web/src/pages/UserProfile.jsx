@@ -5,10 +5,12 @@ import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
 import { Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useNotifications } from '../hooks/useNotifications';
 import defaultProfile from '../assets/defaultprofileimage.png';
  
 export default function UserProfile() {
   const { handleLogout, checkAuth, getUserDetails } = useAuth();
+  const { confirmDanger, alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     userId: '',
@@ -139,16 +141,24 @@ export default function UserProfile() {
     fetchUserPets();
   }, [navigate]);
  
-  const handleDeletePet = async (petId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this pet?");
-    if (!confirmDelete) return;
- 
+  const handleDeletePet = async (petId) => {    
+    const confirmed = await confirmDanger(
+      "Are you sure you want to delete this pet? This action cannot be undone.",
+      "Delete Pet",
+      {
+        confirmText: "Delete Pet",
+        cancelText: "Keep Pet"
+      }
+    );
+    
+    if (!confirmed) return;
+
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
- 
+
     try {
       const response = await fetch(`http://localhost:8080/pets/delete/${petId}`, {
         method: "DELETE",
@@ -157,19 +167,19 @@ export default function UserProfile() {
           'Content-Type': 'application/json'
         }
       });
- 
+
       const data = await response.json();
-     
+      
       if (!response.ok) {
         throw new Error(data.message || "Failed to delete pet");
       }
- 
+
       // Remove the deleted pet from state
       setUserPets(userPets.filter(pet => pet.petId !== petId));
-      alert(data.message || "Pet deleted successfully");
+      alertSuccess(data.message || "Pet deleted successfully");
     } catch (err) {
       console.error("Error deleting pet:", err);
-      setError(err.message);
+      alertError(err.message, "Failed to Delete Pet");
     }
   };
 

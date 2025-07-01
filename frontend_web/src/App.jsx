@@ -2,15 +2,18 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import TheRoutes from './pages/TheRoutes';
-import { SidebarProvider } from './components/sidebar-c/SidebarContext';
+import { SidebarProvider } from './contexts/SidebarContext';
+import { AlertProvider } from './contexts/AlertContext';
 
 function App() {
   return (
-    <SidebarProvider>
-      <Router>
-        <TheRoutes />
-      </Router>
-    </SidebarProvider>
+    <AlertProvider>
+      <SidebarProvider>
+        <Router>
+          <TheRoutes />
+        </Router>
+      </SidebarProvider>
+    </AlertProvider>
   );
 }
 

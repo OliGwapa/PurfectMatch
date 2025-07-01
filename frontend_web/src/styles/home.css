@@ -27,7 +27,7 @@ html, body, #root {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("../assets/background2.jpg");
+  background-image: url("../assets/background.png");
   background-repeat: repeat;
   background-size: 250px 250px;
   background-position: center;

@@ -73,7 +73,7 @@
 }
 
 .upload-label:hover {
-  border-color: #4f46e5;
+  border-color: #c55757;
   background: #f5f7ff;
 }
 
@@ -251,7 +251,7 @@
 }
 
 .save-btn {
-  background: #4f46e5;
+  background: #c55757;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -262,7 +262,7 @@
 }
 
 .save-btn:hover {
-  background: #4338ca;
+  background: #c55757;
 }
 
 .save-btn:disabled {
@@ -294,7 +294,7 @@
 }
 
 .file-upload-label:hover {
-  border-color: #007bff;
+  border-color: #c55757;
   background-color: #f0f8ff;
 }
 

@@ -14,7 +14,7 @@ import Messages from './Messages'; // Import Messages
 import BookingCalendar from './BookingCalendar'; // Import BookingCalendar
 import Notifications from './Notifications'; // Import Notifications
 import EditPet from './EditPet'; // Import EditPet
- 
+import BookingPage from './BookingPage'; // Import BookingPage
  
  
 export default function TheRoutes() {    
@@ -36,6 +36,7 @@ export default function TheRoutes() {
             <Route path="/booking" element={<ProtectedRoute><BookingCalendar /></ProtectedRoute>} />
             <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
             <Route path="/edit-pet/:petId" element={<ProtectedRoute><EditPet /></ProtectedRoute>} />
+            <Route path="/bookingpage" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
         </Routes>
  
     );

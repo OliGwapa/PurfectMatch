@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import PetsIcon from '@mui/icons-material/Pets';
 import { useNavigate } from 'react-router-dom';
+import BookingPage from './BookingPage';
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
@@ -37,7 +38,7 @@ export default function Dashboard() {
   const [selectedPet, setSelectedPet] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [bookingPet, setBookingPet] = useState(null);
   const observer = useRef(null);
   const loadMoreRef = useRef(null);
   const settingsRef = useRef(null);
@@ -152,48 +153,13 @@ const fetchPets = useCallback(async (pageToFetch) => {
     };
   }, [handleObserver]);
 
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('darkMode', newMode.toString());
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+  const handleBookPet = (pet) => {
+    setBookingPet(pet); // Opens BookingPage modal
   };
 
-  const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
-    if (!confirmDelete) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("User not authenticated");
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/delete/me`, {
-        method: "DELETE",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete account.");
-      }
-
-      const result = await response.json();
-      alert(result.message || "Account deleted successfully");
-
-      await signOut(auth);
-      localStorage.clear();
-      navigate("/login");
-    } catch (err) {
-      console.error("Account deletion failed:", err);
-      alert(err.message || "Account deletion failed.");
-    }
+  const handleCloseBooking = () => {
+    setSelectedPet(bookingPet); 
+    setBookingPet(null);        
   };
 
   const handlePetClick = (pet) => {
@@ -284,7 +250,18 @@ const fetchPets = useCallback(async (pageToFetch) => {
           <div ref={loadMoreRef} style={{ height: '20px' }} />
         </div>
 
-        <PetModal pet={selectedPet} onClose={handleCloseModal} />
+        <PetModal pet={selectedPet} onClose={handleCloseModal} onBook={handleBookPet} />
+          {bookingPet && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <BookingPage
+                  petId={bookingPet.petId}
+                  petName={bookingPet.name}
+                  onClose={handleCloseBooking}
+                />
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );

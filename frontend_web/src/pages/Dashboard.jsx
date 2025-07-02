@@ -88,7 +88,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No authentication token found");
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/pets/feed?page=${pageToFetch}&size=${size}`, {
+    const response = await fetch(`http://localhost:8080/pets/feed?page=${pageToFetch}&size=${size}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
       }
     };
   }, [handleObserver]);
-
+  
   const handlePetClick = (pet) => {
     console.log('Selected pet data:', pet);
     setSelectedPet(pet);

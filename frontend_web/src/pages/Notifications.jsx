@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Check, X } from 'lucide-react';
-import { useNotifications } from '../hooks/useNotifications';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useWebSocket } from './useWebSocket';
 import NotificationPopup from './NotificationPopup';
-
+ 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
-  const { confirm, alertSuccess, alertError } = useNotifications();
   const token = localStorage.getItem('token');
   let userId = null;
-
+ 
   if (token) {
     try {
       const decoded = jwtDecode(token);
@@ -20,14 +18,14 @@ const Notifications = () => {
       console.error('Failed to decode JWT:', error);
     }
   }
-
+ 
   // 1. Fetch initial notifications
   useEffect(() => {
     if (!token) {
       console.warn('No token found, skipping notification fetch');
       return;
     }
-
+ 
     const fetchNotifications = async () => {
       try {
         const response = await axios.get(
@@ -43,14 +41,14 @@ const Notifications = () => {
     };
     fetchNotifications();
   }, [token]);
-
+ 
   // 2. Handle new notifications via WebSocket
   const handleNotification = (newNotification) => {
     setNotifications((prev) => [newNotification, ...prev]);
   };
-
+ 
   useWebSocket(handleNotification);
-
+ 
   // 3. Handle approve/reject actions
   const handleAction = async (bookingId, action) => {
     try {
@@ -64,10 +62,10 @@ const Notifications = () => {
       setNotifications((prev) => prev.filter((n) => n.link !== bookingId));
     } catch (error) {
       console.error(`Failed to ${action} booking:`, error.response?.data, error.message);
-      alertSuccess(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
+      alert(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
     }
   };
-
+ 
   // 4. Mark as read
   const markAsRead = async (notificationId) => {
     try {
@@ -87,7 +85,7 @@ const Notifications = () => {
       console.error('Failed to mark as read:', error.response?.data || error.message);
     }
   };
-
+ 
   return (
     <div className="notifications-container">
       <header className="notifications-header">
@@ -95,7 +93,7 @@ const Notifications = () => {
         <h2>Notifications</h2>
         <NotificationPopup />
       </header>
-
+ 
       {notifications.length === 0 ? (
         <p className="empty-state">No notifications found</p>
       ) : (
@@ -136,5 +134,6 @@ const Notifications = () => {
     </div>
   );
 };
-
+ 
 export default Notifications;
+ 

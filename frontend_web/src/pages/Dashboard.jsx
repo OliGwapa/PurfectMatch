@@ -6,11 +6,13 @@ import Sidebar from '../components/sidebar-c/Sidebar';
 import PetModal from '../components/PetModal';
 import FeedPetCard from '../components/FeedPetCard';
 import SkeletonCard from '../components/SkeletonCard';
+import BookingPage from './BookingPage';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import PetsIcon from '@mui/icons-material/Pets';
 import { useNavigate } from 'react-router-dom';
+
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
@@ -37,6 +39,7 @@ export default function Dashboard() {
   const [selectedPet, setSelectedPet] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [bookingPet, setBookingPet] = useState(null);
 
   const observer = useRef(null);
   const loadMoreRef = useRef(null);
@@ -151,6 +154,15 @@ const fetchPets = useCallback(async (pageToFetch) => {
       }
     };
   }, [handleObserver]);
+
+  const handleBookPet = (pet) => {
+    setBookingPet(pet);
+  };
+
+  const handleCloseBooking = () => {
+    setSelectedPet(bookingPet); 
+    setBookingPet(null);        
+  };
   
   const handlePetClick = (pet) => {
     console.log('Selected pet data:', pet);
@@ -242,6 +254,17 @@ const fetchPets = useCallback(async (pageToFetch) => {
         </div>
 
         <PetModal pet={selectedPet} onClose={handleCloseModal} />
+          {bookingPet && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <BookingPage
+                  petId={bookingPet.petId}
+                  petName={bookingPet.name}
+                  onClose={handleCloseBooking}
+                />
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );

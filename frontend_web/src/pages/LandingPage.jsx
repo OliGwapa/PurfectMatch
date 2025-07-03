@@ -11,14 +11,11 @@ const LandingPage = () => {
       <div className="foreground-content">
         <header className="navbar">
           <div className="navbar-left">
-            <img src={logo} alt="Logo" className="logo" />
+            <Link to="/"><img src={logo} alt="Logo" className="logo" /></Link>
             <span className="site-name">Pawfect Match</span>
           </div>
           <nav className="navbar-right">
-            <a href="#features">Features</a>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#testimonials">Testimonials</a>
-            <a href="#contact">Contact</a>
+            
             <Link to="/login" className="login-btn">Log In</Link>
             <Link to="/signup" className="signup-btn">Sign Up</Link>
           </nav>
@@ -26,14 +23,14 @@ const LandingPage = () => {
 
         <div className="landing-content-container">
           <div className="hero-section">
-            <button className="find-btn">Find Your Perfect Pet Match</button>
+            <Link to="/login"><button className="find-btn">Find Your Perfect Pet Match</button></Link>
             <h1>Connect Pets with<br />Their Perfect Companions</h1>
             <p>
               Whether you're looking for a playdate, a companion, or a forever home for your furry
               friend, Pawfect Match brings pet lovers together.
             </p>
             <div className="cta-buttons">
-              <button className="get-started">Get Started</button>
+              <Link to="/signup"><button className="get-started">Get Started</button></Link>
               <button className="learn-more">Learn More</button>
             </div>
           </div>

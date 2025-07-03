@@ -120,7 +120,7 @@ export default function Signup() {
       <div className="left-section">
         <div className="background-overlay"></div>
         <div className="logo-container">
-          <img src={logo} alt="Logo" className="loginsidelogo" />
+          <Link to="/"><img src={logo} alt="Logo" className="loginsidelogo" /></Link>
         </div>
       </div>
  
@@ -195,7 +195,7 @@ export default function Signup() {
           </form>
  
           <p>
-            Already have an account? <Link to="/">Sign in here!</Link>
+            Already have an account? <Link to="/login">Sign in here!</Link>
           </p>
         </div>
       </div>

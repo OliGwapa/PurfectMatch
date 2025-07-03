@@ -4,6 +4,9 @@ import { Client } from '@stomp/stompjs';
 import '../styles/Messages.css';
 import { ArrowLeft, UserPlus, Plus, Send, LogOut, User } from 'lucide-react';
 import logo from '../assets/Logo1.png';
+import Banner from '../components/Banner';
+import Sidebar from '../components/sidebar-c/Sidebar';
+
 
 export default function Messages() {
   const { threadId } = useParams();
@@ -230,146 +233,173 @@ export default function Messages() {
 
   // Render for /messages (no threadId)
   if (!threadId) {
-    return (
-      <div className="messages-wrapper">
-        <div className="messages-header">
-          <img src={logo} alt="Logo" className="header-logo" />
-          <h2 className="header-title">Message a Fur Parent!</h2>
-          <LogOut className="logout-icon" onClick={handleLogout} />
-        </div>
-        <div className="messages-main">
-          <div className="sidebar-left">
-            <div className="messages-title">
-            <div onClick={() => navigate('/dashboard')} className="back-to-dashboard" style={{ cursor: 'pointer' }}>
-              <ArrowLeft size={20} />
-            </div>
-              <h3>Messages</h3>
-              <UserPlus size={20} />
-            </div>
-            <div className="thread-list">
-              {connectionError ? (
-                <p className="error-message">{connectionError}</p>
-              ) : threads.length > 0 ? (
-                threads.map((thread) => {
-                  const currentUser = extractUserIdFromToken(token);
-                  const otherUser = thread.participantIds.find((id) => id !== currentUser);
-                  return (
-                    <div
-                      key={thread.threadId}
-                      className={`thread-item ${thread.threadId === threadId ? 'active' : ''}`}
-                      onClick={() => handleThreadClick(thread.threadId)}
-                    >
-                      <User className="thread-icon" size={24} />
-                      <div className="thread-info">
-                        <span className="thread-name">{otherUser}</span>
-                        {thread.unreadCounts?.[currentUser.replace('@', '_')] > 0 && (
-                          <span className="unread-count">
-                            {thread.unreadCounts[currentUser.replace('@', '_')]}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <p>No conversations yet</p>
-              )}
-            </div>
-          </div>
-          <div className="chat-container">
-            <div className="no-thread-selected">
-              <p>Select a conversation to start chatting</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Render for /messages/:threadId
   return (
-    <div className="messages-wrapper">
-      <div className="messages-header">
-        <img src={logo} alt="Logo" className="header-logo" />
-        <h2 className="header-title">Message a Fur Parent!</h2>
-        <LogOut className="logout-icon" onClick={handleLogout} />
-      </div>
-      <div className="messages-main">
-        <div className="sidebar-left">
-          <div className="messages-title">
-            <ArrowLeft size={20} />
-            <h3>Messages</h3>
-            <UserPlus size={20} />
-          </div>
-          <div className="thread-list">
-            {connectionError ? (
-              <p className="error-message">{connectionError}</p>
-            ) : threads.length > 0 ? (
-              threads.map((thread) => {
-                const currentUser = extractUserIdFromToken(token);
-                const otherUser = thread.participantIds.find((id) => id !== currentUser);
-                return (
-                  <div
-                    key={thread.threadId}
-                    className={`thread-item ${thread.threadId === threadId ? 'active' : ''}`}
-                    onClick={() => handleThreadClick(thread.threadId)}
-                  >
-                    <User className="thread-icon" size={24} />
-                    <div className="thread-info">
-                      <span className="thread-name">{otherUser}</span>
-                      {thread.unreadCounts?.[currentUser.replace('@', '_')] > 0 && (
-                        <span className="unread-count">
-                          {thread.unreadCounts[currentUser.replace('@', '_')]}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p>No conversations yet</p>
-            )}
-          </div>
-        </div>
-        <div className="chat-container">
-          <div className="chat-header">
-            <div className="chat-user-info">
-              <strong>{userInfo.name}</strong>
-              <p>{userInfo.location}</p>
+    <div className="home-wrapper">
+      <Banner />
+      <div className="main-content">
+        <Sidebar activeItem="messages" onLogout={handleLogout} />
+        <div className="center-content expanded">
+          <div className="messages-inner-layout">
+            {/* Chat Area Placeholder */}
+            <div className="chat-container">
+              <div className="no-thread-selected">
+                <p>Select a conversation to start chatting</p>
+              </div>
             </div>
-          </div>
-          <div className="chat-messages">
-            {connectionError ? (
-              <p className="error-message">{connectionError}</p>
-            ) : (
-              messages.map((msg) => (
-                <div
-                  key={msg.messageId}
-                  className={`message ${
-                    msg.senderEmail === extractUserIdFromToken(token) ? 'sent' : 'received'
-                  }`}
-                >
-                  <p>{msg.content}</p>
-                  <span className="timestamp">{new Date(msg.sentAt).toLocaleTimeString()}</span>
-                </div>
-              ))
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-          <div className="message-input-bar">
-            <Plus className="plus-icon" />
-            <input
-              type="text"
-              placeholder="Write a message"
-              className="message-input"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            />
-            <Send className="send-icon" onClick={handleSendMessage} />
+
+            {/* Thread List (Right Sidebar) */}
+            <div className="thread-sidebar">
+              <div className="messages-title">
+                
+                <h3>Messages</h3>
+                <UserPlus size={20} />
+              </div>
+              <div className="thread-list">
+                {connectionError ? (
+                  <p className="error-message">{connectionError}</p>
+                ) : threads.length > 0 ? (
+                  threads.map((thread) => {
+                    const currentUser = extractUserIdFromToken(token);
+                    const otherUser = thread.participantIds.find(
+                      (id) => id !== currentUser
+                    );
+                    return (
+                      <div
+                        key={thread.threadId}
+                        className={`thread-item ${
+                          thread.threadId === threadId ? 'active' : ''
+                        }`}
+                        onClick={() => handleThreadClick(thread.threadId)}
+                      >
+                        <User className="thread-icon" size={24} />
+                        <div className="thread-info">
+                          <span className="thread-name">{otherUser}</span>
+                          {thread.unreadCounts?.[currentUser.replace('@', '_')] > 0 && (
+                            <span className="unread-count">
+                              {thread.unreadCounts[currentUser.replace('@', '_')]}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p>No conversations yet</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+
+  // Render for /messages/:threadId
+  return (
+    <div className="home-wrapper">
+      <Banner />
+      <div className="main-content">
+        <Sidebar activeItem="messages" onLogout={handleLogout} />
+        <div className="center-content expanded">
+          <div className="messages-inner-layout">
+            {/* Chat Area (Center) */}
+            <div className="chat-container">
+              <div className="chat-header">
+                <div className="chat-user-info">
+                  <strong>{userInfo.name}</strong>
+                  <p>{userInfo.location}</p>
+                </div>
+              </div>
+
+              <div className="chat-messages">
+                {connectionError ? (
+                  <p className="error-message">{connectionError}</p>
+                ) : (
+                  messages.map((msg) => (
+                    <div
+                      key={msg.messageId}
+                      className={`message ${
+                        msg.senderEmail === extractUserIdFromToken(token)
+                          ? 'sent'
+                          : 'received'
+                      }`}
+                    >
+                      <p>{msg.content}</p>
+                      <span className="timestamp">
+                        {new Date(msg.sentAt).toLocaleTimeString()}
+                      </span>
+                    </div>
+                  ))
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+
+              <div className="message-input-bar">
+                <Plus className="plus-icon" />
+                <input
+                  type="text"
+                  placeholder="Write a message"
+                  className="message-input"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                />
+                <Send className="send-icon" onClick={handleSendMessage} />
+              </div>
+            </div>
+
+            {/* Thread List (Right Sidebar) */}
+            <div className="thread-sidebar">
+              <div className="messages-title">
+                <ArrowLeft
+                  size={20}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate('/dashboard')}
+                />
+                <h3>Messages</h3>
+                <UserPlus size={20} />
+              </div>
+
+              <div className="thread-list">
+                {connectionError ? (
+                  <p className="error-message">{connectionError}</p>
+                ) : threads.length > 0 ? (
+                  threads.map((thread) => {
+                    const currentUser = extractUserIdFromToken(token);
+                    const otherUser = thread.participantIds.find(
+                      (id) => id !== currentUser
+                    );
+                    return (
+                      <div
+                        key={thread.threadId}
+                        className={`thread-item ${
+                          thread.threadId === threadId ? 'active' : ''
+                        }`}
+                        onClick={() => handleThreadClick(thread.threadId)}
+                      >
+                        <User className="thread-icon" size={24} />
+                        <div className="thread-info">
+                          <span className="thread-name">{otherUser}</span>
+                          {thread.unreadCounts?.[currentUser.replace('@', '_')] > 0 && (
+                            <span className="unread-count">
+                              {thread.unreadCounts[currentUser.replace('@', '_')]}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p>No conversations yet</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
 }

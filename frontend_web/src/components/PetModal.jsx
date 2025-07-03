@@ -6,10 +6,10 @@ import DocumentImage from './DocumentImage';
 import Button from './Button';
 import defaultProfile from '../assets/defaultprofileimage.png';
 
-const PetModal = ({ pet, onClose }) => {
-  const navigate = useNavigate();
-  const modalRef = useRef(null);
-  const [showFullDescription, setShowFullDescription] = useState(false);
+  const PetModal = ({ pet, onClose, onBook }) => {
+    const navigate = useNavigate();
+    const modalRef = useRef(null);
+    const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -27,13 +27,12 @@ const PetModal = ({ pet, onClose }) => {
   if (!pet) return null;
 
   const handleBooking = () => {
-    navigate('/booking', { 
-      state: { 
-        petId: pet.petId, 
-        petName: pet.name 
-      } 
-    });
+    if (onBook) {
+      onBook(pet);   
+      onClose();      
+    }
   };
+
 
   const handleChat = () => {
     navigate(`/messages/${pet.userId}`);

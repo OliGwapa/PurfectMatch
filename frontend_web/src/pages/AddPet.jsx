@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useNotifications } from '../hooks/useNotifications';
 import "../styles/AddPet.css";
 import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
@@ -11,7 +10,6 @@ import { signOut } from "firebase/auth";
 
 export default function AddPet() {
   const { handleLogout, checkAuth, getUserDetails } = useAuth();
-  const { alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const firstName = localStorage.getItem("firstName");
   const token = localStorage.getItem("token");
@@ -38,6 +36,12 @@ export default function AddPet() {
   const [error, setError] = useState(null);
   const [pedigreeFile, setPedigreeFile] = useState(null);
   const [healthFile, setHealthFile] = useState(null);
+
+  const breedOptions = {
+  Dog: ["Labrador", "Poodle", "German Shepherd", "Bulldog", "Beagle"],
+  Cat: ["Siamese", "Persian", "Maine Coon", "Bengal", "Ragdoll"],
+  Bird: ["Parakeet", "Canary", "Cockatiel", "Parrot", "Finch"],
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -261,11 +265,11 @@ export default function AddPet() {
         }
       }
 
-      alertSuccess("Pet created successfully!");
+      alert("Pet created successfully!");
       navigate("/profile");
     } catch (err) {
       console.error("Error in handleSave:", err);
-      alertError(err.message, "Failed to Create Pet");
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -277,7 +281,7 @@ export default function AddPet() {
 
   return (
     <div className="home-wrapper">
-      <Banner firstName={firstName} />
+      <Banner firstName={firstName} onLogout={handleLogout} />
 
       <div className="main-content">
         <Sidebar activeItem="add-pet" onLogout={handleLogout} onSearchToggle={handleSearchToggle}/>
@@ -360,7 +364,6 @@ export default function AddPet() {
                         <option value="Dog">Dog</option>
                         <option value="Cat">Cat</option>
                         <option value="Bird">Bird</option>
-                        <option value="Other">Other</option>
                       </select>
                     </div>
                   </div>
@@ -368,16 +371,31 @@ export default function AddPet() {
                   <div className="form-row">
                     <div className="form-group">
                       <label>Breed*</label>
-                      <input 
-                        type="text" 
-                        name="breed" 
-                        value={petData.breed} 
-                        onChange={handleInputChange} 
-                        required
-                        disabled={isLoading}
-                      />
+                      {petData.species in breedOptions && breedOptions[petData.species].length > 0 ? (
+                        <select
+                          name="breed"
+                          value={petData.breed}
+                          onChange={handleInputChange}
+                          required
+                          disabled={isLoading}
+                        >
+                          <option value="">Select breed</option>
+                          {breedOptions[petData.species].map((breed) => (
+                            <option key={breed} value={breed}>{breed}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type="text"
+                          name="breed"
+                          value={petData.breed}
+                          onChange={handleInputChange}
+                          required
+                          disabled={isLoading}
+                          placeholder="Enter breed"
+                        />
+                      )}
                     </div>
-
                     <div className="form-group">
                       <label>Gender*</label>
                       <div className="radio-options">

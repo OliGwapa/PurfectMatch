@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
-import "../styles/login.css";
+import "../styles/Login.css";
 import logo from "../assets/Logo1.png";
-
+ 
 // MUI imports
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
+ 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       if (currentUser) {
@@ -26,22 +26,22 @@ export default function Login() {
     });
     return () => unsubscribe();
   }, [navigate]);
-
+ 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+ 
     if (!formData.email || !formData.password) {
       setError("All fields are required.");
       setLoading(false);
       return;
     }
-
+ 
     try {
       const res = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
@@ -51,14 +51,14 @@ export default function Login() {
           password: formData.password,
         }),
       });
-
+ 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login failed");
-
+ 
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("firstName", data.firstName);
-
+ 
       if (data.role === "ADMIN") {
         navigate("/admin-dashboard");
       } else if (data.role === "USER") {
@@ -72,7 +72,7 @@ export default function Login() {
       setLoading(false);
     }
   };
-
+ 
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError("");
@@ -80,16 +80,16 @@ export default function Login() {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const idToken = await user.getIdToken();
-
+ 
       const response = await fetch("http://localhost:8080/auth/firebase-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),
       });
-
+ 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Google login failed");
-
+ 
       localStorage.setItem("token", data.token);
       navigate("/dashboard");
     } catch (err) {
@@ -99,10 +99,10 @@ export default function Login() {
       setLoading(false);
     }
   };
-
+ 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (e) => e.preventDefault();
-
+ 
   return (
     <div className="login-container">
       <div className="left-section">
@@ -111,14 +111,14 @@ export default function Login() {
           <img src={logo} alt="Logo" className="loginsidelogo" />
         </div>
       </div>
-
+ 
       <div className="right-section">
         <div className="form-container">
           <h2>WELCOME BACK!</h2>
           <p>Please enter your details.</p>
-
+ 
           {error && <p className="error-message">{error}</p>}
-
+ 
           <form onSubmit={handleSubmit} className="login-form">
             <TextField
               name="email"
@@ -131,7 +131,7 @@ export default function Login() {
               variant="outlined"
               margin="normal"
             />
-
+ 
             <TextField
               name="password"
               type={showPassword ? "text" : "password"}
@@ -144,11 +144,12 @@ export default function Login() {
               margin="normal"
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
+                  <InputAdornment position="end" sx={{ pr: 0.55 }}>
                     <IconButton
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
+                      
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -156,7 +157,7 @@ export default function Login() {
                 ),
               }}
             />
-
+ 
             <div className="options">
               <label>
                 <input type="checkbox" name="remember" /> Remember
@@ -165,12 +166,12 @@ export default function Login() {
                 Forgot password?
               </a>
             </div>
-
+ 
             <button type="submit" className="btn" disabled={loading}>
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
-
+ 
           <div className="google-signin">
             <button
               onClick={handleGoogleSignIn}
@@ -180,7 +181,7 @@ export default function Login() {
               {loading ? "Signing in..." : "Sign in with Google"}
             </button>
           </div>
-
+ 
           <p>
             Don't have an account? <a href="/signup">Sign up for free!</a>
           </p>

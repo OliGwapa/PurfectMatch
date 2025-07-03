@@ -12,10 +12,8 @@ const localizer = momentLocalizer(moment);
 const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const petId = propPetId || location.state?.petId || '';
   const petName = propPetName || location.state?.petName || 'Unknown Pet';
-
   const [events, setEvents] = useState([]);
   const [pendingBookings, setPendingBookings] = useState([]);
   const [bookingHistory, setBookingHistory] = useState([]);

@@ -15,7 +15,8 @@ import BookingCalendar from './BookingCalendar'; // Import BookingCalendar
 import Notifications from './Notifications'; // Import Notifications
 import EditPet from './EditPet'; // Import EditPet
 import BookingPage from './BookingPage'; // Import BookingPage
- 
+import About from './About'; // Adjust path if needed
+
  
 export default function TheRoutes() {    
     return (
@@ -37,6 +38,8 @@ export default function TheRoutes() {
             <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
             <Route path="/edit-pet/:petId" element={<ProtectedRoute><EditPet /></ProtectedRoute>} />
             <Route path="/bookingpage" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
+            <Route path="/about" element={<About />} />
+
         </Routes>
  
     );

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
 import "../styles/login.css";
 import logo from "../assets/Logo1.png";
+import { Link } from "react-router-dom";
 
 // MUI imports
 import TextField from "@mui/material/TextField";
@@ -58,6 +59,8 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("firstName", data.firstName);
+      localStorage.setItem("userId", data.userId); 
+
 
       if (data.role === "ADMIN") {
         navigate("/admin-dashboard");
@@ -108,7 +111,7 @@ export default function Login() {
       <div className="left-section">
         <div className="background-overlay"></div>
         <div className="logo-container">
-          <img src={logo} alt="Logo" className="loginsidelogo" />
+          <Link to="/"><img src={logo} alt="Logo" className="loginsidelogo" /></Link>
         </div>
       </div>
 

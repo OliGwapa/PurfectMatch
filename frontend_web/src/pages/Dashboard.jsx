@@ -19,6 +19,7 @@ export default function Dashboard() {
   const { handleLogout, handleDeleteAccount, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
+    userId: localStorage.getItem("userId") || '',
     fullName: localStorage.getItem("firstName") || '',
     email: localStorage.getItem("email") || '',
     phone: localStorage.getItem("phone") || '',
@@ -71,6 +72,7 @@ export default function Dashboard() {
     }
 
     setUserDetails({
+      userId: localStorage.getItem("userId") || '',
       fullName: localStorage.getItem("firstName") || '',
       email: localStorage.getItem("email") || '',
       phone: localStorage.getItem("phone") || '',
@@ -78,6 +80,12 @@ export default function Dashboard() {
       profileImage: localStorage.getItem("profileImage") || ''
     });
   }, [navigate]);
+
+  useEffect(() => {
+  if (userDetails.email) {
+    console.log("Current user's email:", userDetails.email);
+  }
+}, [userDetails.email]);
 
 const fetchPets = useCallback(async (pageToFetch) => {
   if (loading || !hasMore) return;
@@ -107,6 +115,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
     }
 
     const data = await response.json();
+    console.log("Fetched pets:", data);
     setPets((prevPets) => {
       const existingIds = new Set(prevPets.map((pet) => pet.petId));
       const newPets = data.filter((pet) => !existingIds.has(pet.petId));
@@ -172,11 +181,16 @@ const fetchPets = useCallback(async (pageToFetch) => {
     setSelectedPet(null);
   };
 
-  const filteredPets = pets.filter(pet =>
-    pet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    pet.breed.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    pet.species.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredPets = pets
+    .filter(pet =>
+      pet.userId !== userDetails.userId
+    )
+    .filter(pet =>
+      pet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pet.breed.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pet.species.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
 
   return (
     <div className={`home-wrapper ${darkMode ? 'dark' : ''}`}>
@@ -233,9 +247,13 @@ const fetchPets = useCallback(async (pageToFetch) => {
                 <SkeletonCard key={`skeleton-${index}`} />
               ))
             ) : (
-              (showSearch ? filteredPets : pets).map((pet) => (
+              (showSearch
+                ? filteredPets
+                : pets.filter(pet => pet.userId !== userDetails.userId)
+              ).map((pet) => (
                 <FeedPetCard key={pet.petId} pet={pet} onClick={handlePetClick} />
               ))
+
             )}
           </div>
 

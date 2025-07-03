@@ -31,7 +31,7 @@ const LandingPage = () => {
             </p>
             <div className="cta-buttons">
               <Link to="/signup"><button className="get-started">Get Started</button></Link>
-              <button className="learn-more">Learn More</button>
+              <Link to="/about"><button className="learn-more">Learn More</button></Link>
             </div>
           </div>
 

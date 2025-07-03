@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut, Calendar, Sun, Moon, Trash2 } from 'lucide-react';
-import React, { useState, useRef, useEffect } from 'react';
-import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut, Calendar, Sun, Moon, Trash2 } from 'lucide-react';
 import SidebarLink from './SidebarLink';
 import SidebarSection from './SidebarSection';
 import { useSidebar } from '../../contexts/SidebarContext';

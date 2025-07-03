@@ -63,9 +63,8 @@ html, body, #root {
   background-color: #ffffff;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
   transition: transform 0.2s;
-  color: #1e293b;
 }
 
 .pet-card:hover {
@@ -97,7 +96,7 @@ html, body, #root {
 .pet-info p {
   margin: 4px 0;
   font-size: 14px;
-  color: #475569;
+  color: #3d372e;
 }
 
 .end-message {

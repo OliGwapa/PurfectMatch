@@ -1,5 +1,3 @@
-
-
 .main-content {
   display: flex;
   height: calc(100vh - 80px); /* Adjust based on your banner height */
@@ -12,6 +10,7 @@
 }
 
 .profile-container {
+  max-width: 1400px;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -46,6 +45,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: #4d2f32;
+  background: #4d2f32;
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
@@ -61,7 +61,15 @@
   text-decoration: none;
 }
 
+.edit-profile-button:focus,
+.edit-profile-button:active,
+.edit-profile-button:visited {
+  color: white;
+  text-decoration: none;
+}
+
 .edit-profile-button:hover {
+  background: #E5D0AC;
   background: #E5D0AC;
 }
 
@@ -130,6 +138,7 @@
   align-items: center;
   gap: 6px;
   background: #4d2f32;
+  background: #4d2f32;
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
@@ -145,7 +154,15 @@
   text-decoration: none;
 }
 
+.add-pet-button:focus,
+.add-pet-button:active,
+.add-pet-button:visited {
+  color: white;
+  text-decoration: none;
+}
+
 .add-pet-button:hover {
+  background: #E5D0AC;
   background: #E5D0AC;
 }
 
@@ -229,6 +246,7 @@
 }
 
 .add-pet-link:hover {
+  color: #E5D0AC;
   color: #E5D0AC;
   text-decoration: underline;
 }

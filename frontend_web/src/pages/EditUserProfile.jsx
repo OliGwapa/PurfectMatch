@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useNotifications } from '../hooks/useNotifications';
 import "../styles/EditUserProfile.css";
 import defaultProfilePic from '../assets/defaultprofileimage.png';
 
 export default function EditProfile() {
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { onProfileUpdated } = state || {};
@@ -120,10 +122,10 @@ export default function EditProfile() {
 
       const updatedUser = await response.json();
       setProfileImage(updatedUser.profilePicture || '');
-      alert("Profile picture updated successfully!");
+      alertSuccess("Profile picture updated successfully!");
     } catch (err) {
       console.error("Error uploading profile picture:", err);
-      setError(err.message);
+      alertError(err.message);
     } finally {
       setImageLoading(false);
     }
@@ -172,12 +174,12 @@ export default function EditProfile() {
       }
 
       const result = await response.json();
-      alert(result.message || "Profile updated successfully");
+      alertSuccess(result.message || "Profile updated successfully");
       if (onProfileUpdated) onProfileUpdated();
       navigate("/profile");
     } catch (err) {
       console.error("Error updating profile:", err);
-      setError(err.message);
+      alertError(err.message);
     } finally {
       setLoading(false);
     }

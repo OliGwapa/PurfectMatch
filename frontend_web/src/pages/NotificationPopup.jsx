@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useWebSocket } from './useWebSocket';
+import { useNotifications } from '../hooks/useNotifications';
 
 const NotificationPopup = () => {
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const [notifications, setNotifications] = useState([]);
   const token = localStorage.getItem('token');
 
@@ -40,7 +42,7 @@ const NotificationPopup = () => {
       );
       setNotifications((prev) => prev.filter((n) => n.link !== bookingId));
     } catch (error) {
-      alert(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
+      alertSuccess(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
     }
   };
 

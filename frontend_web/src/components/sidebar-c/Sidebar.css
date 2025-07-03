@@ -17,6 +17,8 @@
   width: 80px;
   padding: 5px 5px;
   gap: 0px;
+  overflow-y: auto; /* Keep scrolling enabled */
+  overflow-x: visible; /* Allow horizontal overflow for dropdown */
 }
 
 .sidebar-section {
@@ -118,6 +120,8 @@
   .sidebar.collapsed {
     width: 100%;
     padding: 15px;
+    overflow-x: auto;
+    overflow-y: visible;
   }
   
   .sidebar-section {
@@ -149,4 +153,115 @@
     font-size: 12px;
     margin-top: 0;
   }
+}
+
+/* Settings Dropdown Styles */
+.settings-container {
+  position: relative;
+}
+
+.settings-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 8px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideUp 0.2s ease-out;
+}
+
+.sidebar.collapsed .settings-dropdown {
+  left: 0;
+  right: 0;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 14px;
+  color: #333;
+}
+
+.sidebar.collapsed .settings-item {
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  text-align: center;
+  justify-content: center;
+  width: auto;
+  min-width: 60px;
+  border-radius: 6px;
+}
+
+.sidebar.collapsed .settings-item span {
+  font-size: 10px;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+.settings-item:hover {
+  background: #f5f5f5;
+}
+
+.settings-item.delete-account {
+  color: #dc3545;
+}
+
+.settings-item.delete-account:hover {
+  background: #fef2f2;
+}
+
+.settings-item:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode styles */
+.dark .settings-dropdown {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.dark .settings-item {
+  color: #f9fafb;
+}
+
+.dark .settings-item:hover {
+  background: #4b5563;
+}
+
+.dark .settings-item.delete-account {
+  color: #f87171;
+}
+
+.dark .settings-item.delete-account:hover {
+  background: #7f1d1d;
 }

@@ -6,17 +6,19 @@ import Sidebar from '../components/sidebar-c/Sidebar';
 import PetModal from '../components/PetModal';
 import FeedPetCard from '../components/FeedPetCard';
 import SkeletonCard from '../components/SkeletonCard';
+import BookingPage from './BookingPage';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import PetsIcon from '@mui/icons-material/Pets';
 import { useNavigate } from 'react-router-dom';
+
 import BookingPage from './BookingPage';
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
 export default function Dashboard() {
-  const { handleLogout, checkAuth, getUserDetails } = useAuth();
+  const { handleLogout, handleDeleteAccount, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     fullName: localStorage.getItem("firstName") || '',
@@ -38,6 +40,7 @@ export default function Dashboard() {
   const [selectedPet, setSelectedPet] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [bookingPet, setBookingPet] = useState(null);
   const [bookingPet, setBookingPet] = useState(null);
   const observer = useRef(null);
   const loadMoreRef = useRef(null);
@@ -89,6 +92,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No authentication token found");
 
+    const response = await fetch(`http://localhost:8080/pets/feed?page=${pageToFetch}&size=${size}`, {
     const response = await fetch(`http://localhost:8080/pets/feed?page=${pageToFetch}&size=${size}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -154,14 +158,17 @@ const fetchPets = useCallback(async (pageToFetch) => {
   }, [handleObserver]);
 
   const handleBookPet = (pet) => {
-    setBookingPet(pet); // Opens BookingPage modal
+    setBookingPet(pet);
   };
 
   const handleCloseBooking = () => {
     setSelectedPet(bookingPet); 
     setBookingPet(null);        
+  const handleCloseBooking = () => {
+    setSelectedPet(bookingPet); 
+    setBookingPet(null);        
   };
-
+  
   const handlePetClick = (pet) => {
     console.log('Selected pet data:', pet);
     setSelectedPet(pet);
@@ -200,6 +207,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               label="Search pets by name, breed, or species..."
               sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
                 marginBottom: '20px',
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {

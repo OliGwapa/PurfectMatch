@@ -156,6 +156,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
   const handleBookPet = (pet) => {
     setBookingPet(pet);
   };
+
        
   const handleCloseBooking = () => {
     setSelectedPet(bookingPet); 

@@ -4,9 +4,16 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useWebSocket } from './useWebSocket';
 import NotificationPopup from './NotificationPopup';
+import Banner from '../components/Banner';
+import Sidebar from '../components/sidebar-c/Sidebar';
+import { useAuth } from '../hooks/useAuth';
+import '../styles/Notifications.css';
  
 const Notifications = () => {
+  const { handleLogout } = useAuth();
   const [notifications, setNotifications] = useState([]);
+  const firstName = localStorage.getItem("firstName") || '';
+ 
   const token = localStorage.getItem('token');
   let userId = null;
  
@@ -19,7 +26,7 @@ const Notifications = () => {
     }
   }
  
-  // 1. Fetch initial notifications
+  // Fetch initial notifications
   useEffect(() => {
     if (!token) {
       console.warn('No token found, skipping notification fetch');
@@ -42,14 +49,14 @@ const Notifications = () => {
     fetchNotifications();
   }, [token]);
  
-  // 2. Handle new notifications via WebSocket
+  // Handle new notifications via WebSocket
   const handleNotification = (newNotification) => {
     setNotifications((prev) => [newNotification, ...prev]);
   };
  
   useWebSocket(handleNotification);
  
-  // 3. Handle approve/reject actions
+  // Approve/reject booking requests
   const handleAction = async (bookingId, action) => {
     try {
       await axios.post(
@@ -66,7 +73,7 @@ const Notifications = () => {
     }
   };
  
-  // 4. Mark as read
+  // Mark notifications as read
   const markAsRead = async (notificationId) => {
     try {
       await axios.patch(
@@ -87,53 +94,62 @@ const Notifications = () => {
   };
  
   return (
-    <div className="notifications-container">
-      <header className="notifications-header">
-        <Bell size={24} className="icon" />
-        <h2>Notifications</h2>
-        <NotificationPopup />
-      </header>
+    <div className="home-wrapper">
+      <Banner firstName={firstName} />
  
-      {notifications.length === 0 ? (
-        <p className="empty-state">No notifications found</p>
-      ) : (
-        <ul className="notifications-list">
-          {notifications.map((notification) => (
-            <li
-              key={notification.notificationId}
-              className={`notification-item ${notification.read ? 'read' : 'unread'}`}
-              onClick={() => markAsRead(notification.notificationId)}
-            >
-              <p className="notification-message">{notification.message}</p>
-              {notification.type === 'BOOKING_REQUEST' && (
-                <div className="action-buttons">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAction(notification.link, 'approve');
-                    }}
-                    className="approve-btn"
+      <div className="main-content">
+        <Sidebar activeItem="notifications" onLogout={handleLogout} />
+ 
+        <div className="center-content">
+          <div className="notifications-container">
+            <header className="notifications-header">
+              <Bell size={55} className="icon" />
+              <h2>Notifications</h2>
+              <NotificationPopup />
+            </header>
+ 
+            {notifications.length === 0 ? (
+              <p className="empty-state">No notifications found</p>
+            ) : (
+              <ul className="notifications-list">
+                {notifications.map((notification) => (
+                  <li
+                    key={notification.notificationId}
+                    className={`notification-item ${notification.read ? 'read' : 'unread'}`}
+                    onClick={() => markAsRead(notification.notificationId)}
                   >
-                    <Check size={16} /> Approve
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAction(notification.link, 'reject');
-                    }}
-                    className="reject-btn"
-                  >
-                    <X size={16} /> Reject
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+                    <p className="notification-message">{notification.message}</p>
+                    {notification.type === 'BOOKING_REQUEST' && (
+                      <div className="action-buttons">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAction(notification.link, 'approve');
+                          }}
+                          className="approve-btn"
+                        >
+                          <Check size={16} /> Approve
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAction(notification.link, 'reject');
+                          }}
+                          className="reject-btn"
+                        >
+                          <X size={16} /> Reject
+                        </button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
  
 export default Notifications;
- 

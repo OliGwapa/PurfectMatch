@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNotifications } from '../hooks/useNotifications';
+import { useNotifications } from "../../hooks/useNotifications";
 import { useParams, useNavigate } from 'react-router-dom';
-import "../styles/EditPet.css";
+import "../../styles/ProfileCSS/EditPet.css";
 
 export default function EditPet() {
   const { confirm, alertSuccess, alertError } = useNotifications();

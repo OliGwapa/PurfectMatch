@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/login.css";
-import logo from "../assets/Logo1.png";
+import "../../styles/LandingCSS/Login.css";
+import logo from "../../assets/Logo1.png";
 import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {

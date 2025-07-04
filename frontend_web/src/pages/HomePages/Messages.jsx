@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
-import '../styles/Messages.css';
+import '../../styles/HomeCSS/Messages.css';
 import { ArrowLeft, UserPlus, Plus, Send, LogOut, User } from 'lucide-react';
-import logo from '../assets/Logo1.png';
-import Banner from '../components/Banner';
-import Sidebar from '../components/sidebar-c/Sidebar';
+import logo from '../../assets/Logo1.png';
+import Banner from '../../components/Banner';
+import Sidebar from '../../components/sidebar-c/Sidebar';
 
 
 export default function Messages() {

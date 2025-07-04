@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useNotifications } from '../hooks/useNotifications';
-import "../styles/EditUserProfile.css";
-import defaultProfilePic from '../assets/defaultprofileimage.png';
+import { useNotifications } from '../../hooks/useNotifications';
+import "../../styles/ProfileCSS/EditUserProfile.css";
+import defaultProfilePic from '../../assets/defaultprofileimage.png';
 
 export default function EditProfile() {
   const { confirm, alertSuccess, alertError } = useNotifications();

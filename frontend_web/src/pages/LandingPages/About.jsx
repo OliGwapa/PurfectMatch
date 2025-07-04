@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/about.css";
-import logo from "../assets/Logo1.png";
+import "../../styles/LandingCSS/about.css";
+import logo from "../../assets/Logo1.png";
 
 export default function About() {
   return (

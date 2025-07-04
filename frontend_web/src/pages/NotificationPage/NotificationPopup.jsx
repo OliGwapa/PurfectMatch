@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useWebSocket } from './useWebSocket';
-import { useNotifications } from '../hooks/useNotifications';
+import { useWebSocket } from './../useWebSocket';
+import { useNotifications } from '../../hooks/useNotifications';
 
 const NotificationPopup = () => {
   const { confirm, alertSuccess, alertError } = useNotifications();

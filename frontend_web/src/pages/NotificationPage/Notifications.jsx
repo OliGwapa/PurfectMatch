@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Bell, Check, X } from 'lucide-react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { useWebSocket } from './useWebSocket';
+import { useWebSocket } from '../useWebSocket';
 import NotificationPopup from './NotificationPopup';
-import Banner from '../components/Banner';
-import Sidebar from '../components/sidebar-c/Sidebar';
-import { useAuth } from '../hooks/useAuth';
-import '../styles/Notifications.css';
+import Banner from '../../components/Banner';
+import Sidebar from '../../components/sidebar-c/Sidebar';
+import { useAuth } from '../../hooks/useAuth';
+import '../../styles/HomeCSS/Notifications.css';
  
 const Notifications = () => {
   const { handleLogout } = useAuth();

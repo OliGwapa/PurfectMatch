@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import "../styles/home.css";
-import Banner from '../components/Banner';
-import Sidebar from '../components/sidebar-c/Sidebar';
-import PetModal from '../components/PetModal';
-import FeedPetCard from '../components/FeedPetCard';
-import SkeletonCard from '../components/SkeletonCard';
+import { useAuth } from '../../hooks/useAuth';
+import "../../styles/HomeCSS/home.css";
+import Banner from '../../components/Banner';
+import Sidebar from '../../components/sidebar-c/Sidebar';
+import PetModal from '../../components/PetModal';
+import FeedPetCard from '../../components/FeedPetCard';
+import SkeletonCard from '../../components/SkeletonCard';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import PetsIcon from '@mui/icons-material/Pets';
 import { useNavigate } from 'react-router-dom';
-import BookingPage from './BookingPage';
-import { auth } from "../firebase";
+import BookingPage from '../BookingPages/BookingPage';
+import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 
 export default function Dashboard() {

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/home.css';
-import Banner from '../components/Banner';
+import Banner from '../../components/Banner';
 import { Home, Search, Bell, Mail, Settings, Plus, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { CircularProgress, Box, Grid, Typography } from '@mui/material';
-import PetCard from '../components/PetCard';
-import defaultProfile from '../assets/defaultprofileimage.png';
+import PetCard from '../../components/PetCard';
+import defaultProfile from '../../assets/defaultprofileimage.png';
 
 export default function PetList() {
   const navigate = useNavigate();

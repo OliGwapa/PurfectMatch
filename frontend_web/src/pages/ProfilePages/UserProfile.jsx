@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import "../styles/UserProfile.css";
-import Banner from '../components/Banner';
-import Sidebar from '../components/sidebar-c/Sidebar';
+import { useAuth } from '../../hooks/useAuth';
+import "../../styles/ProfileCSS/UserProfile.css";
+import Banner from '../../components/Banner';
+import Sidebar from '../../components/sidebar-c/Sidebar';
 import { Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useNotifications } from '../hooks/useNotifications';
-import defaultProfile from '../assets/defaultprofileimage.png';
+import { useNotifications } from '../../hooks/useNotifications';
+import defaultProfile from '../../assets/defaultprofileimage.png';
  
 export default function UserProfile() {
   const { handleLogout, checkAuth, getUserDetails } = useAuth();

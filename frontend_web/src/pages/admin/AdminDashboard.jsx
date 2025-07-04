@@ -15,15 +15,15 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { People, Pets, Group } from '@mui/icons-material';
-import UserList from './admin/UserList';
-import UserEditForm from './admin/UserEditForm';
-import PetList from './admin/PetList';
-import PetEditForm from './admin/PetEditForm';
-import UserProfileList from './admin/UserProfileList';
-import { useUsers } from './admin/useUsers';
-import { usePets } from './admin/usePets';
-import { useUserProfiles } from './admin/useUserProfiles';
-import styles from '../styles/AdminDashboard.module.css';
+import UserList from './UserList';
+import UserEditForm from './UserEditForm';
+import PetList from './PetList';
+import PetEditForm from './PetEditForm';
+import UserProfileList from './UserProfileList';
+import { useUsers } from './useUsers';
+import { usePets } from './usePets';
+import { useUserProfiles } from './useUserProfiles';
+import styles from '../../styles/AdminDashboard.module.css';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState(() => localStorage.getItem('adminActiveTab') || 'users');

@@ -3,11 +3,11 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import '../styles/BookingCalendar.css';
-import Banner from '../components/Banner';
-import Sidebar from '../components/sidebar-c/Sidebar';
+import '../../styles/BookingCSS/BookingCalendar.css';
+import Banner from '../../components/Banner';
+import Sidebar from '../../components/sidebar-c/Sidebar';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth'; // Optional, if you want logout
+import { useAuth } from '../../hooks/useAuth'; // Optional, if you want logout
 
 const localizer = momentLocalizer(moment);
 

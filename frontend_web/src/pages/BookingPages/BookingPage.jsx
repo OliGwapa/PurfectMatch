@@ -4,7 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { X, History } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import "../styles/BookingPage.css";
+import "../../styles/BookingCSS/BookingPage.css";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);

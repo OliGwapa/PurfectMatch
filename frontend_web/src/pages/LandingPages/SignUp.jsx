@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../styles/Login.css";
-import logo from "../assets/Logo1.png";
+import "../../styles/LandingCSS/Login.css";
+import logo from "../../assets/Logo1.png";
  
 // MUI
 import TextField from "@mui/material/TextField";

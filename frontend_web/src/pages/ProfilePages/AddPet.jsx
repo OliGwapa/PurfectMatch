@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import "../styles/AddPet.css";
-import Banner from '../components/Banner';
-import Sidebar from '../components/sidebar-c/Sidebar';
+import { useAuth } from '../../hooks/useAuth';
+import "../../styles/ProfileCSS/AddPet.css";
+import Banner from '../../components/Banner';
+import Sidebar from '../../components/sidebar-c/Sidebar';
 import { Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 
 export default function AddPet() {

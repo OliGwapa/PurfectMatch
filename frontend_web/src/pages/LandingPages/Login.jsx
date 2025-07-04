@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, googleProvider, signInWithPopup } from "../firebase";
-import "../styles/Login.css";
-import logo from "../assets/Logo1.png";
+import { auth, googleProvider, signInWithPopup } from "../../firebase";
+import "../../styles/LandingCSS/Login.css";
+import logo from "../../assets/Logo1.png";
 import { Link } from "react-router-dom";
 
 // MUI imports

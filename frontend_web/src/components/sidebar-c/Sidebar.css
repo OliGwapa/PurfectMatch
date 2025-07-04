@@ -2,8 +2,7 @@
 .sidebar {
   width: 250px;
   padding: 20px;
-  background: #ffffff;
-  border-right: 1px solid #e0e0e0;
+  background-color: var(--bg-secondary);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -40,12 +39,12 @@
   transform: translateX(-50%);
   width: 60%;
   height: 1px;
-  background: #e0e0e0;
+  background: var(--border-color);
 }
 
 .sidebar-section h4 {
   margin: 0 0 10px 0;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   text-transform: uppercase;
   transition: opacity 0.3s ease;
@@ -64,7 +63,7 @@
   gap: 10px;
   padding: 8px 12px;
   border-radius: 8px;
-  color: #333;
+  color: var(--text-secondary);
   text-decoration: none;
   transition: all 0.2s;
   position: relative;
@@ -89,13 +88,13 @@
 }
 
 .sidebar a:hover {
-  background: #f4f7fa;
-  color: #c05621;
+  background: var(--hover-color);
+  color: var(--sb-hover-color);
 }
 
 .sidebar a.active {
-  background: #f3efe8;
-  color: #7c715e;
+  background: var(--bg-tertiary);
+  color: var(--input-focus);
 }
 
 .link-text {
@@ -165,8 +164,9 @@
   bottom: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin-bottom: 8px;
@@ -197,7 +197,7 @@
   cursor: pointer;
   transition: background 0.2s;
   font-size: 14px;
-  color: #333;
+  color: var(--text-secondary);
 }
 
 .sidebar.collapsed .settings-item {
@@ -208,7 +208,6 @@
   justify-content: center;
   width: auto;
   min-width: 60px;
-  border-radius: 6px;
 }
 
 .sidebar.collapsed .settings-item span {
@@ -218,19 +217,16 @@
 }
 
 .settings-item:hover {
-  background: #f5f5f5;
+  background: var(--hover-color);
+  color: var(--sb-hover-color);
 }
 
 .settings-item.delete-account {
-  color: #dc3545;
+  color: #af444f;
 }
 
 .settings-item.delete-account:hover {
   background: #fef2f2;
-}
-
-.settings-item:not(:last-child) {
-  border-bottom: 1px solid #f0f0f0;
 }
 
 @keyframes slideUp {
@@ -242,26 +238,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Dark mode styles */
-.dark .settings-dropdown {
-  background: #374151;
-  border-color: #4b5563;
-}
-
-.dark .settings-item {
-  color: #f9fafb;
-}
-
-.dark .settings-item:hover {
-  background: #4b5563;
-}
-
-.dark .settings-item.delete-account {
-  color: #f87171;
-}
-
-.dark .settings-item.delete-account:hover {
-  background: #7f1d1d;
 }

@@ -35,8 +35,8 @@
 
 .confirm-dialog {
   position: relative;
-  background: white;
-  border-color: #bba4ac;
+  background: var(--bg-primary);
+  border-color: var(--border-color);
   border-radius: 0.75rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   width: 100%;
@@ -111,7 +111,7 @@
 .confirm-dialog-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
   line-height: 1.5;
 }
@@ -120,6 +120,7 @@
   font-size: 1rem;
   margin-bottom: 1.5rem;
   line-height: 1.6;
+  color: var(--text-secondary);
 }
 
 .confirm-dialog-actions {
@@ -141,11 +142,6 @@
   text-align: center;
 }
 
-.confirm-dialog-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
-}
-
 .confirm-dialog-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -153,14 +149,15 @@
 
 /* Cancel button */
 .confirm-dialog-button.cancel {
-  background-color: white;
-  color: #6b7280;
-  border: 1px solid #a3a3a3;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 0.5px solid var(--btn-border);
 }
 
 .confirm-dialog-button.cancel:hover:not(:disabled) {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
+  background-color: var(--hover-color);
+  color: var(--text-secondary);
+  border: 0.5px solid var(--btn-border);
 }
 
 /* Confirm button variants */

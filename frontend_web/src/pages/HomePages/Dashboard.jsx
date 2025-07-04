@@ -15,6 +15,7 @@ import BookingPage from '../BookingPages/BookingPage';
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 
+
 export default function Dashboard() {
   const { handleLogout, handleDeleteAccount, checkAuth, getUserDetails } = useAuth();
   const navigate = useNavigate();
@@ -35,7 +36,6 @@ export default function Dashboard() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
   const [selectedPet, setSelectedPet] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,14 +43,6 @@ export default function Dashboard() {
   const observer = useRef(null);
   const loadMoreRef = useRef(null);
   const settingsRef = useRef(null);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -193,7 +185,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
 
 
   return (
-    <div className={`home-wrapper ${darkMode ? 'dark' : ''}`}>
+    <div className="home-wrapper">
       <Banner firstName={userDetails.fullName.split(' ')[0]} />
 
       <div className="main-content">

@@ -3,17 +3,17 @@ import { Home, Search, Bell, Mail, Settings, User, List, Plus, LogOut, Calendar,
 import SidebarLink from './SidebarLink';
 import SidebarSection from './SidebarSection';
 import { useSidebar } from '../../contexts/SidebarContext';
+import { useDarkMode } from '../../contexts/DarkModeContext';
 import ConfirmDialog from '../ConfirmDialog';
 import CustomAlert from '../CustomAlert';
 import { useAuth } from '../../hooks/useAuth';
 import './Sidebar.css';
 
-
 const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
   const { handleLogout, handleDeleteAccount, checkAuth, getUserDetails } = useAuth();
   const { isCollapsed } = useSidebar();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [showSettings, setShowSettings] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -21,12 +21,6 @@ const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
   const [alert, setAlert] = useState(null);
   const settingsRef = useRef(null);
   
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    document.documentElement.classList.toggle('dark', newMode);
-  };
-
   // Function to show alerts
   const showAlert = (type, title, message, duration = 4000) => {
     setAlert({ type, title, message });
@@ -185,9 +179,9 @@ const Sidebar = ({ activeItem, onLogout, onSearchToggle }) => {
             {showSettings && (
               <div className="settings-dropdown">
                 <button className="settings-item" onClick={toggleDarkMode}>
-                  {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-                  {!isCollapsed && (darkMode ? 'Light Mode' : 'Dark Mode')}
-                  {isCollapsed && <span>{darkMode ? 'Light' : 'Dark'}</span>}
+                  {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+                  {!isCollapsed && (isDarkMode ? 'Light Mode' : 'Dark Mode')}
+                  {isCollapsed && <span>{isDarkMode ? 'Light' : 'Dark'}</span>}
                 </button>
                 <button className="settings-item delete-account" onClick={handleDeleteAccountClick}>
                   <Trash2 size={16} />

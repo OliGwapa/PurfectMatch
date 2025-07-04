@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import "../../styles/ProfileCSS/AddPet.css";
 import Banner from '../../components/Banner';
+import Button from '../../components/Button';
 import Sidebar from '../../components/sidebar-c/Sidebar';
+import { useNotifications } from '../../hooks/useNotifications';
 import { Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../../firebase";
@@ -10,6 +12,7 @@ import { signOut } from "firebase/auth";
 
 export default function AddPet() {
   const { handleLogout, checkAuth, getUserDetails } = useAuth();
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const firstName = localStorage.getItem("firstName");
   const token = localStorage.getItem("token");
@@ -265,7 +268,7 @@ export default function AddPet() {
         }
       }
 
-      alert("Pet created successfully!");
+      alertSuccess("Pet created successfully!");
       navigate("/profile");
     } catch (err) {
       console.error("Error in handleSave:", err);
@@ -581,22 +584,13 @@ export default function AddPet() {
                     </div>
                   </div>
 
-                  <div className="form-buttons">
-                    <button 
-                      type="button"
-                      className="cancel-btn" 
-                      onClick={handleCancel}
-                      disabled={isLoading}
-                    >
+                  <div className="add-pet-form-buttons">
+                    <Button type="button" className="cancel-btn" onClick={handleCancel} disabled={isLoading}>
                       Cancel
-                    </button>
-                    <button 
-                      type="submit" 
-                      className="save-btn" 
-                      disabled={isLoading}
-                    >
+                    </Button>
+                    <Button type="submit" className="save-btn" disabled={isLoading}>
                       {isLoading ? 'Saving...' : 'Save Pet'}
-                    </button>
+                    </Button>
                   </div>
                 </form>
               </div>

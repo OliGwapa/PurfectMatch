@@ -13,7 +13,7 @@
 .add-pet-container {
   max-width: 1200px;
   margin: 0 auto;
-  background: white;
+  background: var(--bg-last);
   border: 1px solid #6D2323;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -26,6 +26,10 @@
   margin: 0 0 25px 0;
   font-size: 24px;
   color: #333;
+}
+
+.form-group label {
+  color: var(--text-primary);
 }
 
 .error-message {
@@ -74,7 +78,7 @@
 
 .upload-label:hover {
   border-color: #c55757;
-  background: #f5f7ff;
+  background: var(--hover-color);
 }
 
 .photo-preview-container {
@@ -155,7 +159,7 @@
   background: #f1f3f5;
 }
 
-.form-section {
+.add-pet-form-section {
   flex: 1;
   min-width: 0;
 }
@@ -167,45 +171,6 @@
   margin-bottom: 20px;
   width: 100%;
   min-width: 0; /* Allow grid to shrink */
-}
-
-.form-group {
-  margin-bottom: 15px;
-  min-width: 0; /* Allow form group to shrink */
-  width: 100%;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: rgb(105, 2, 2);
-  font-weight: 500;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: all 0.2s;
-  box-sizing: border-box;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: #4f46e5;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 80px;
 }
 
 .radio-options {
@@ -224,50 +189,9 @@
 }
 
 .radio-label input {
-  width: auto;
+  background-color: var(--bg-tertiary);
+  color: var(sb-hover-color);
   margin: 0;
-}
-
-.form-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.cancel-btn {
-  background: #f8f9fa;
-  border: 1px solid #ddd;
-  color: #333;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-
-.cancel-btn:hover {
-  background: #f1f3f5;
-}
-
-.save-btn {
-  background: #c55757;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-
-.save-btn:hover {
-  background: #c55757;
-}
-
-.save-btn:disabled {
-  background: #a5b4fc;
-  cursor: not-allowed;
 }
 
 .loading-spinner {
@@ -479,5 +403,35 @@
   .form-group select,
   .form-group textarea {
     padding: 8px 10px;
+  }
+}
+
+.add-pet-form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .add-pet-form-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cancel-btn,
+  .save-btn {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-pet-form-buttons {
+    margin-top: 20px;
+    padding-top: 15px;
   }
 }

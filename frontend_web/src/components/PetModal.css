@@ -14,12 +14,12 @@
 
 /* Modal Content */
 .modal-content {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 24px;
-  max-width: 500px;
+  max-width: 550px;
   width: 90%;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -28,7 +28,6 @@
 /* Modal Header */
 .modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 16px;
@@ -43,7 +42,12 @@
   color: #1f2937;
 }
 
+.modal-section {
+  color: var(--text-secondary)
+}
+
 .close-button {
+  margin-left: auto;
   background: none;
   border: none;
   cursor: pointer;
@@ -54,15 +58,15 @@
 }
 
 .close-button:hover {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: var(--hover-color);
+  color: var(--text-secondary);
 }
 
 /* Modal Body */
 .modal-body {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 /* Pet Image Container */
@@ -80,10 +84,17 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.modal-pet-name {
+  color: var(--text-primary);
+  text-align: center;
+  padding: 0px;
+  background-color: var(--accent-color);
+  border-radius: 20px;
+}
+
 /* Description Section */
 .description-section {
-  background-color: #f9fafb;
-  border: 2px solid #e5e7eb;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
   padding: 16px;
   position: relative;
@@ -91,8 +102,8 @@
 
 .description-content p {
   margin: 0;
-  color: #374151;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  line-height: 1.15;
   white-space: pre-wrap;
 }
 
@@ -100,24 +111,20 @@
   position: absolute;
   bottom: 8px;
   right: 12px;
-  background: white;
-  border: 1px solid #d1d5db;
+  background-color: var(--bg-secondary);
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .read-more-button:hover {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
-  color: #374151;
+  color: var(--sb-hover-color);
 }
 
 /* Pet Details Grid */
@@ -128,8 +135,7 @@
 }
 
 .detail-item {
-  background-color: #f9fafb;
-  border: 2px solid #e5e7eb;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
   padding: 12px;
   text-align: center;
@@ -141,14 +147,14 @@
 .detail-item strong {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
 
 .detail-item span {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 /* Documents Section */
@@ -159,10 +165,8 @@
 }
 
 .document-item {
-  background-color: #f9fafb;
-  border: 2px solid #e5e7eb;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
-  padding: 16px;
   text-align: center;
   min-height: 80px;
   display: flex;
@@ -207,4 +211,16 @@
     width: 100px;
     height: 100px;
   }
+}
+
+.appointment-management-wrapper {
+  text-align: right;
+}
+
+.new-booking-panel {
+  text-align: left;
+}
+
+.card-title {
+  text-align: center;
 }

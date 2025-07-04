@@ -9,7 +9,7 @@ const FeedPetCard = ({ pet, onClick }) => {
   };
 
   return (
-    <div className="pet-card" onClick={handleClick} style={{ cursor: 'pointer' }}>
+    <div className="feed-pet-card" onClick={handleClick} style={{ cursor: 'pointer' }}>
       <div className="pet-image-container">
         <img src={pet.photoUrl || defaultProfile} alt={pet.name} className="pet-image" loading="lazy" />
       </div>

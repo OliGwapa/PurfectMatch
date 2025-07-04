@@ -7,7 +7,6 @@
   margin-right: 16px;
   border-radius: 8px;
   border-left: 4px solid;
-  font-family: inherit;
   box-shadow: 0 2px 8px rgba(124, 76, 84, 0.1);
   transition: all 0.3s ease;
 }
@@ -53,13 +52,13 @@
 
 /* Info Alert - Default */
 .custom-alert--info {
-  background-color: #fff;
+  background-color: var(--bg-primary);
   border-left-color: #bba4ac;
 }
 
 /* Success Alert */
 .custom-alert--success {
-  background-color: #f8fdf8;
+  background-color: var(--alert-success-bg);
   border-left-color: #5c9164;
 }
 

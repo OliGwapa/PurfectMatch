@@ -1,16 +1,14 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
 }
  
 .login-container {
     display: flex;
     height: 100vh;
     width: 100%;
-    background-color: #f5f5f5;
 }
- 
+
 /* Left Section Styling */
 .left-section {
     flex: 1;
@@ -21,6 +19,7 @@ body, html {
     min-height: 100vh;
     width: 100%;
     overflow: hidden;
+    background-color: var(--bg-overlay);
 }
  
  
@@ -31,7 +30,7 @@ body, html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/background.png');
+    background-image: url("../assets/background.png");
     background-size: cover;
     background-position: center;
     opacity: 0.2;
@@ -62,7 +61,7 @@ body, html {
 /* Right Section Styling */
 .right-section {
     flex: 1;
-    background-color: #E5D0AC;
+    background-color: var(--banner-color2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,8 +69,8 @@ body, html {
  
 /* Form container */
 .form-container {
- 
-    background: #fff;
+    background: var(--card-bg2);
+    color: var(--text-primary);
     padding-top: 10px;
     padding-right: 25px;
     padding-left: 25px;
@@ -85,12 +84,11 @@ body, html {
  
 .form-container h2 {
     font-size: 1.5rem;
-    color: #333;
     margin-bottom: 0px;
 }
  
 .form-container p {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.8rem;
     margin-bottom: 5px;
 }
@@ -107,42 +105,16 @@ body, html {
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 95%;
-    font-size: 0.95rem;
-    background-color: white;  
-    color: #333;
+    background-color: var(--hover-color);  
+    color: var(--text-primary);
 }
  
 input[type="checkbox"] {
-    accent-color: white;
+    background-color: var(--bg-primary);
     width: 16px;
     height: 16px;
     cursor: pointer;
     border: 1px solid #000;
-}
- 
-input[type="checkbox"] {
-    accent-color: white !important;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-}
- 
-.btn {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    background-color: #6D2323;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 15px;
-    width: 100%;
-    transition: background-color 0.3s ease;
-}
- 
-.btn:hover {
-    background-color: #c55757;
 }
  
 /* Options Styling */
@@ -151,6 +123,7 @@ input[type="checkbox"] {
     justify-content: space-between;
     align-items: center;
     font-size: 0.9rem;
+    margin-bottom: 10px;
 }
  
 .options label {
@@ -161,21 +134,22 @@ input[type="checkbox"] {
  
 .forgot-password {
     text-decoration: none;
-    color: #555;
+    color: var(--accent-color);
 }
  
 .forgot-password:hover {
-    color: #333;
+    color: var(--sb-hover-color);
 }
  
 /* Sign-up link */
 p a {
-    color: #6D2323;
+    color: #b85656;
     text-decoration: none;
 }
  
 p a:hover {
     text-decoration: underline;
+    color: var(--sb-hover-color);
 }
  
 /* Message Styles */
@@ -191,4 +165,19 @@ p a:hover {
 /* Footer Removal */
 footer {
     display: none;
+}
+
+.google-signin {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.google-signin .btn {
+  width: 100%;
+  max-width: 100%;
+}
+
+.btn {
+  margin-top: 12px;
 }

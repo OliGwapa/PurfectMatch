@@ -74,9 +74,12 @@ form {
 /* Labels */
 .form-group label {
   font-weight: 600;
-  color: #444;
   margin-bottom: 5px;
   font-size: 14px;
+}
+
+.form-group input:disabled, .form-group textarea:disabled, .form-group select:disabled {
+  background-color: var(--bg-secondary)
 }
 
 /* Inputs and selects */
@@ -193,35 +196,6 @@ form {
   padding: 10px 0;
 }
 
-/* Save and Cancel buttons */
-.save-btn,
-.cancel-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-
-.save-btn {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.save-btn:hover {
-  background-color: #218838;
-}
-
-.cancel-btn {
-  background-color: #6c757d;
-  color: #fff;
-}
-
-.cancel-btn:hover {
-  background-color: #5a6268;
-}
-
 /* Loading and error states */
 .loading,
 .error {
@@ -280,10 +254,5 @@ form {
   .form-actions {
     flex-direction: column;
     gap: 8px;
-  }
-
-  .save-btn,
-  .cancel-btn {
-    width: 100%;
   }
 }

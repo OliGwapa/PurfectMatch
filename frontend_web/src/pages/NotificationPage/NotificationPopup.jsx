@@ -2,34 +2,34 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useWebSocket } from './../useWebSocket';
 import { useNotifications } from '../../hooks/useNotifications';
-
+ 
 const NotificationPopup = () => {
   const { confirm, alertSuccess, alertError } = useNotifications();
   const [notifications, setNotifications] = useState([]);
   const token = localStorage.getItem('token');
-
+ 
   // Handle new notifications
   const handleNotification = (notification) => {
     const id = Date.now(); // Unique ID for timer
     setNotifications((prev) => [...prev, { ...notification, id }]);
   };
-
+ 
   // Initialize WebSocket
   useWebSocket(handleNotification);
-
+ 
   // Auto-hide notifications after 5 seconds
   useEffect(() => {
     if (notifications.length === 0) return;
-
+ 
     const timers = notifications.map((notif) =>
       setTimeout(() => {
         setNotifications((prev) => prev.filter((n) => n.id !== notif.id));
       }, 5000)
     );
-
+ 
     return () => timers.forEach((timer) => clearTimeout(timer));
   }, [notifications]);
-
+ 
   // Handle booking actions
   const handleBookingAction = async (bookingId, action) => {
     try {
@@ -45,7 +45,7 @@ const NotificationPopup = () => {
       alertSuccess(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
     }
   };
-
+ 
   return (
     <div className="notification-popup">
       {notifications.map((notification) => (
@@ -70,5 +70,5 @@ const NotificationPopup = () => {
     </div>
   );
 };
-
+ 
 export default NotificationPopup;

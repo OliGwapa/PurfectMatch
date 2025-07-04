@@ -4,6 +4,7 @@ import "../styles/AddPet.css";
 import Banner from '../components/Banner';
 import Button from '../components/Button';
 import Sidebar from '../components/sidebar-c/Sidebar';
+import { useNotifications } from '../hooks/useNotifications';
 import { Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
@@ -11,6 +12,7 @@ import { signOut } from "firebase/auth";
 
 export default function AddPet() {
   const { handleLogout, checkAuth, getUserDetails } = useAuth();
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const firstName = localStorage.getItem("firstName");
   const token = localStorage.getItem("token");
@@ -266,7 +268,7 @@ export default function AddPet() {
         }
       }
 
-      alert("Pet created successfully!");
+      alertSuccess("Pet created successfully!");
       navigate("/profile");
     } catch (err) {
       console.error("Error in handleSave:", err);

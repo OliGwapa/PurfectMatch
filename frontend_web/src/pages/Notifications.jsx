@@ -8,6 +8,7 @@ import Banner from '../components/Banner';
 import Sidebar from '../components/sidebar-c/Sidebar';
 import { useAuth } from '../hooks/useAuth';
 import '../styles/Notifications.css';
+import { useNotifications } from '../hooks/useNotifications';
  
 const Notifications = () => {
   const { handleLogout } = useAuth();
@@ -69,7 +70,7 @@ const Notifications = () => {
       setNotifications((prev) => prev.filter((n) => n.link !== bookingId));
     } catch (error) {
       console.error(`Failed to ${action} booking:`, error.response?.data, error.message);
-      alert(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
+      alertSuccess(`Failed to ${action} booking: ${error.response?.data?.message || error.message}`);
     }
   };
  

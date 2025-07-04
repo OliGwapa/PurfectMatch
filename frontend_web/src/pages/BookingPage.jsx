@@ -6,12 +6,14 @@ import "../components/PetModal.css";
 import Button from '../components/Button';
 import { X } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { useNotifications } from '../hooks/useNotifications';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
 const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
   const location = useLocation();
+  const { confirm, alertSuccess, alertError } = useNotifications();
 
   const petId = propPetId || location.state?.petId || '';
   const petName = propPetName || location.state?.petName || 'Unknown Pet';
@@ -39,7 +41,7 @@ const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newBooking.petId) {
-      alert("Missing pet ID. Please go back and select a pet.");
+      alertSuccess("Missing pet ID. Please go back and select a pet.");
       return;
     }
 
@@ -58,10 +60,10 @@ const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
 
       setNewBooking({ petId, date: '', title: '', status: 'PENDING' });
 
-      alert("Booking request submitted successfully!");
+      alertSuccess("Booking request submitted successfully!");
     } catch (err) {
       console.error("Error creating booking:", err);
-      alert(`Error: ${err.response?.data?.message || err.message}`);
+      alertError(`Error: ${err.response?.data?.message || err.message}`);
     }
   };
 

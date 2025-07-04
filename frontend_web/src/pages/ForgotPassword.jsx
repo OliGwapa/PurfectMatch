@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import logo from "../assets/Logo1.png";
 import { Link } from "react-router-dom";
+import { useNotifications } from '../hooks/useNotifications';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Add your email validation + backend call here
-    alert("Password reset link sent to: " + email);
+    alertSuccess("Password reset link sent to: " + email);
     navigate("/"); // Or wherever you want to redirect after
   };
 

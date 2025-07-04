@@ -59,15 +59,17 @@ public class PetService {
             for (int attempt = 1; attempt <= maxRetries; attempt++) {
                 try {
                     logger.info("Checking Cloudinary public_id: {}, attempt: {}", publicId, attempt);
-                    cloudinary.api().resource(publicId, ObjectUtils.asMap("resource_type", "image"));
-                    logger.info("Found existing public_id: {}", publicId);
+                    // Check with the full path including folder for existing resources
+                    String fullPublicId = "pawfectmatch/pets/" + publicId;
+                    cloudinary.api().resource(fullPublicId, ObjectUtils.asMap("resource_type", "image"));
+                    logger.info("Found existing public_id: {}", fullPublicId);
                     suffix++;
                     publicId = basePublicId + "_" + suffix;
                     break;
                 } catch (Exception e) {
                     if (e.getMessage().contains("not found")) {
                         logger.info("Public_id available: {}", publicId);
-                        return publicId;
+                        return publicId; // Return just the filename without folder path
                     }
                     logger.error("Error checking Cloudinary public_id: {}, attempt: {}, error: {}", publicId, attempt, e.getMessage());
                     if (attempt == maxRetries) {
@@ -155,12 +157,14 @@ public Pet getPetByIdAndUserId(String petId, String userId) {
         }
 
         String fileName = sanitizeFileName(file.getOriginalFilename());
-        String publicId = getUniquePublicId("pawfectmatch/pets/" + fileName, petId);
+        String publicId = getUniquePublicId(fileName, petId);
 
+        // FIXED: Use the publicId directly without adding folder path to it
+        // The folder is specified separately in the upload options
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
                 ObjectUtils.asMap(
-                        "folder", "pawfectmatch/pets",
-                        "public_id", publicId,
+                        "folder", "pawfectmatch/pets",  // Folder path
+                        "public_id", publicId,          // Just the filename, no folder path
                         "transformation", new com.cloudinary.Transformation()
                                 .width(800).height(800).crop("limit")
                 ));
@@ -348,48 +352,47 @@ public Pet getPetByIdAndUserId(String petId, String userId) {
 
     public Photo updatePetPhoto(String photoId, String authenticatedEmail, MultipartFile file) throws IOException {
         logger.info("Updating photo with ID: {} by email: {}", photoId, authenticatedEmail);
-    
+
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> {
                     logger.error("Photo not found with ID: {}", photoId);
                     return new RuntimeException("Photo not found with ID: " + photoId);
                 });
-    
+
         Pet pet = petRepository.findById(photo.getPetId())
                 .orElseThrow(() -> {
                     logger.error("Pet not found with ID: {}", photo.getPetId());
                     return new RuntimeException("Pet not found with ID: " + photo.getPetId());
                 });
-    
+
         User user = userRepository.findByEmail(authenticatedEmail)
                 .orElseThrow(() -> {
                     logger.error("User not found with email: {}", authenticatedEmail);
                     return new RuntimeException("User not found with email: " + authenticatedEmail);
                 });
-    
+
         if (!pet.getUserId().equals(user.getUserID())) {
             logger.warn("Unauthorized photo update for photoId: {} by email: {}", photoId, authenticatedEmail);
             throw new RuntimeException("You are not authorized to update this pet's photo");
         }
-    
+
         deletePhotoFromCloudinary(photo);
-    
+
         String fileName = sanitizeFileName(file.getOriginalFilename());
-        String basePublicId = "pawfectmatch/pets/" + fileName;
-    
-        String publicId = getUniquePublicId(basePublicId, pet.getPetId());
-    
+        // Fix: Remove the folder path from the base publicId
+        String publicId = getUniquePublicId(fileName, pet.getPetId());
+
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
                 ObjectUtils.asMap(
-                        "folder", "pawfectmatch/pets",
-                        "public_id", publicId,
+                        "folder", "pawfectmatch/pets",  // This adds the folder path
+                        "public_id", publicId,          // This should be just the filename
                         "transformation", new com.cloudinary.Transformation()
                                 .width(800).height(800).crop("limit")
                 ));
-    
+
         photo.setUrl((String) uploadResult.get("secure_url"));
         photo.setCloudinaryPublicId((String) uploadResult.get("public_id"));
-    
+
         Photo updatedPhoto = photoRepository.save(photo);
         logger.info("Updated photo with ID: {} for petId: {}, public_id: {}", photoId, photo.getPetId(), publicId);
         return updatedPhoto;
@@ -438,12 +441,13 @@ public Pet getPetByIdAndUserId(String petId, String userId) {
         deletePhotoFromCloudinary(photo);
 
         String fileName = sanitizeFileName(file.getOriginalFilename());
-        String publicId = getUniquePublicId("pawfectmatch/pets/" + fileName, photo.getPetId());
+        // Fix: Remove the folder path from the base publicId
+        String publicId = getUniquePublicId(fileName, photo.getPetId());
 
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
                 ObjectUtils.asMap(
-                        "folder", "pawfectmatch/pets",
-                        "public_id", publicId,
+                        "folder", "pawfectmatch/pets",  // This adds the folder path
+                        "public_id", publicId,          // This should be just the filename
                         "transformation", new com.cloudinary.Transformation()
                                 .width(800).height(800).crop("limit")
                 ));
@@ -508,11 +512,16 @@ public Pet getPetByIdAndUserId(String petId, String userId) {
             String photoUrl = photos.get(0).getUrl();
             return new PetFeedResponse(
                 pet.getPetId(),
+                pet.getUserId(),           // Include userId
                 pet.getName(),
                 pet.getSpecies(),
                 pet.getBreed(),
                 photoUrl,
-                pet.getDescription()
+                pet.getDescription(),
+                pet.getPedigreeInfo(),     // Include pedigreeInfo
+                pet.getHealthStatus(),     // Include healthStatus
+                pet.getPrice(),            // Include price
+                pet.getAvailabilityStatus() // Include availability status
             );
         }).collect(Collectors.toList());
 

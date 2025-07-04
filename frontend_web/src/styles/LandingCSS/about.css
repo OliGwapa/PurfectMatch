@@ -1,0 +1,145 @@
+/* About Page Styles */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.about-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* Updated navbar similar to landing page */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #6b3f43;
+  padding: 1rem 2rem;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.site-name {
+  color: white;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.navbar-right a {
+  color: white;
+  margin: 0 1rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-btn,
+.signup-btn {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.login-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+.signup-btn {
+  background-color: #f4ae91;
+  color: #4d2f32;
+}
+
+.about-content-wrapper {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 98px); /* navbar height offset */
+}
+
+/* Left Section - similar to login page */
+.about-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Background overlay */
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+}
+
+/* Logo Container Styling - similar to login page */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Center Logo Styling */
+.center-logo {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 50%;
+}
+
+/* Right Section */
+.about-right {
+  flex: 1;
+  background-color: #E5D0AC;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 25px;
+  max-width: 400px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+.about-box h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.about-box p {
+  color: #444;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}

@@ -82,7 +82,7 @@ export default function UserProfile() {
  
       setPetsLoading(true);
       try {
-        const petsResponse = await fetch("http://localhost:8080/pets/my-pets", {
+        const petsResponse = await fetch('http://localhost:8080/pets/my-pets', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ export default function UserProfile() {
           petsData.map(async (pet) => {
             try {
               const photosResponse = await fetch(
-                "http://localhost:8080/pets/${pet.petId}/photos",
+                `http://localhost:8080/pets/${pet.petId}/photos`,
                 {
                   headers: {
                     'Authorization': `Bearer ${token}`,

@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/login.css";
+import { useNavigate, Link } from "react-router-dom";
+import "../styles/Login.css";
 import logo from "../assets/Logo1.png";
-import { Link } from "react-router-dom";
-import { useNotifications } from '../hooks/useNotifications';
+ 
+// MUI
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
  
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -15,9 +20,9 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-
-  const { confirm, alertSuccess, alertError } = useNotifications();
  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,93 +31,73 @@ export default function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
  
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
+  const handleMouseDownPassword = (e) => e.preventDefault();
+ 
   const validateForm = () => {
-    // Required fields check
     for (const key in formData) {
-      if (!formData[key]) {
-        return "All fields are required.";
-      }
+      if (!formData[key]) return "All fields are required.";
     }
  
-    // Password match
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword)
       return "Passwords do not match.";
-    }
  
-    // Password regex
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (!passwordRegex.test(formData.password)) {
+    if (!passwordRegex.test(formData.password))
       return "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.";
-    }
  
-    // Email regex
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!emailRegex.test(formData.email)) {
-      return "Email must be valid.";
-    }
+    if (!emailRegex.test(formData.email)) return "Email must be valid.";
  
-    // Phone regex
     const phoneRegex = /^\+?[0-9]{10,15}$/;
-    if (!phoneRegex.test(formData.phone)) {
+    if (!phoneRegex.test(formData.phone))
       return "Phone number must be valid (10-15 digits, optional + prefix).";
-    }
  
-    return ""; // No errors
+    return "";
   };
  
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  setLoading(true);
+    e.preventDefault();
+    setError("");
+    setLoading(true);
  
-  const validationError = validateForm();
-  if (validationError) {
-    setError(validationError);
-    setLoading(false);
-    return;
-  }
- 
-  const requestData = {
-    firstName: formData.firstName,
-    lastName: formData.lastName,
-    email: formData.email,
-    phone: formData.phone,
-    address: formData.address,
-    password: formData.password,
-    role: "USER", // Add default role
-    signUpMethod: "EMAIL" // Add default signUpMethod
-  };
- 
-  try {
-    // Create FormData object
-    const formDataToSend = new FormData();
-   
-    // Append user data as a JSON blob
-    formDataToSend.append(
-      "user",
-      new Blob([JSON.stringify(requestData)], {
-        type: "application/json"
-      })
-    );
- 
-    const res = await fetch("http://localhost:8080/auth/register", {
-      method: "POST",
-      body: formDataToSend,
-      // Don't set Content-Type header - browser will set it automatically with boundary
-    });
- 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || "Signup failed");
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      setLoading(false);
+      return;
     }
-   
-    alertSuccess("Signup successful! Please log in.");
-    navigate("/login");
-  } catch (err) {
-    setError(err.message || "Failed to sign up. Please try again.");
-  } finally {
-    setLoading(false);
-  }
+ 
+    const requestData = {
+      ...formData,
+      role: "USER",
+      signUpMethod: "EMAIL",
+    };
+ 
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append(
+        "user",
+        new Blob([JSON.stringify(requestData)], { type: "application/json" })
+      );
+ 
+      const res = await fetch("http://localhost:8080/auth/register", {
+        method: "POST",
+        body: formDataToSend,
+      });
+ 
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+ 
+      alert("Signup successful! Please log in.");
+      navigate("/login");
+    } catch (err) {
+      setError(err.message || "Failed to sign up. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
  
   return (
@@ -120,7 +105,7 @@ export default function Signup() {
       <div className="left-section">
         <div className="background-overlay"></div>
         <div className="logo-container">
-          <Link to="/"><img src={logo} alt="Logo" className="loginsidelogo" /></Link>
+          <img src={logo} alt="Logo" className="loginsidelogo" />
         </div>
       </div>
  
@@ -132,61 +117,118 @@ export default function Signup() {
           {error && <p className="error-message">{error}</p>}
  
           <form onSubmit={handleSubmit} className="login-form">
-            <input
-              type="text"
-              name="firstName"
+            <TextField
               placeholder="Enter first name"
+              name="firstName"
+              type="text"
               value={formData.firstName}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
             />
-            <input
-              type="text"
-              name="lastName"
+ 
+            <TextField
               placeholder="Enter last name"
+              name="lastName"
+              type="text"
               value={formData.lastName}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
             />
-            <input
-              type="email"
-              name="email"
+ 
+            <TextField
               placeholder="Enter email address"
+              name="email"
+              type="email"
               value={formData.email}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
             />
-            <input
-              type="tel"
-              name="phone"
+ 
+            <TextField
               placeholder="Enter phone number"
+              name="phone"
+              type="tel"
               value={formData.phone}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
             />
-            <input
-              type="text"
-              name="address"
+ 
+            <TextField
               placeholder="Enter address"
+              name="address"
+              type="text"
               value={formData.address}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
             />
-            <input
-              type="password"
-              name="password"
+ 
+            <TextField
               placeholder="Enter password"
+              name="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <input
-              type="password"
-              name="confirmPassword"
+ 
+            <TextField
               placeholder="Verify password"
+              name="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
               value={formData.confirmPassword}
               onChange={handleChange}
+              fullWidth
               required
+              variant="outlined"
+              margin="normal"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? (
+                        <VisibilityOff />
+                      ) : (
+                        <Visibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
  
             <button type="submit" className="btn" disabled={loading}>

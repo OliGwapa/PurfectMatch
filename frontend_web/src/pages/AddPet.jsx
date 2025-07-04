@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import "../styles/AddPet.css";
 import Banner from '../components/Banner';
+import Button from '../components/Button';
 import Sidebar from '../components/sidebar-c/Sidebar';
 import { Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -581,22 +582,13 @@ export default function AddPet() {
                     </div>
                   </div>
 
-                  <div className="form-buttons">
-                    <button 
-                      type="button"
-                      className="cancel-btn" 
-                      onClick={handleCancel}
-                      disabled={isLoading}
-                    >
+                  <div className="add-pet-form-buttons">
+                    <Button type="button" className="cancel-btn" onClick={handleCancel} disabled={isLoading}>
                       Cancel
-                    </button>
-                    <button 
-                      type="submit" 
-                      className="save-btn" 
-                      disabled={isLoading}
-                    >
+                    </Button>
+                    <Button type="submit" className="save-btn" disabled={isLoading}>
                       {isLoading ? 'Saving...' : 'Save Pet'}
-                    </button>
+                    </Button>
                   </div>
                 </form>
               </div>

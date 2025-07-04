@@ -5,7 +5,7 @@ import './Banner.css';
 import logo from '../assets/Logo1.png';
 import { Link } from 'react-router-dom';
 
-export default function Banner({ firstName = "User", onLogout }) {
+export default function Banner({ firstName = "User" }) {
   const { toggleSidebar } = useSidebar();
 
   return (

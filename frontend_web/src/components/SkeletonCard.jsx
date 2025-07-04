@@ -2,7 +2,7 @@ import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
 const SkeletonCard = () => (
-  <div className="pet-card" style={{ padding: '16px' }}>
+  <div className="feed-pet-card" style={{ padding: '16px' }}>
     <div className="pet-image-container">
       <Skeleton 
         variant="rectangular" 

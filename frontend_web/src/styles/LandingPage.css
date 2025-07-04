@@ -1,7 +1,6 @@
 .landing-page {
     position: relative;
     min-height: 100vh;
-    font-family: 'Segoe UI', sans-serif;
     overflow: hidden;
   }
   
@@ -92,6 +91,11 @@
     text-decoration: none;
     font-weight: 500;
   }
+
+  .navbar-right a:last-child {
+    /* styles for the last link */
+    color: #6e5043;
+  }
     
   .login-btn,
   .signup-btn {
@@ -122,21 +126,23 @@
   .find-btn {
     background-color: #f4ae91;
     border: none;
+    padding: 15px;
     border-radius: 6px;
     font-weight: 500;
+    font-size: medium;
     color: #4d2f32;
   }
     
   .hero-section h1 {
     font-size: 3.8rem;
-    color: #4d2f32;
+    color: var(--landing-h1);
     margin-bottom: 4rem;
     font-weight: bold;
   }
     
   .hero-section p {
     font-size: 1.3rem;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 3rem;
   }
     

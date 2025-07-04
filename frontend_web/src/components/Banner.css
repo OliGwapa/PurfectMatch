@@ -1,61 +1,47 @@
 .banner {
-    width: 100%;
-    background-color: #E5D0AC;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    height: 25px;
-  }
-  
-  .banner-left {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  
-  .logo {
-    height: 34px;
-    width: 34px;
-    border-radius: 50%;
-  }
-  
-  .greeting {
-    font-size: 1rem;
-    color: #524a3e;
-  }
-  
-  .signout-button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .signout-icon {
-    height: 24px;
-    width: 24px;
-  }
-  
-  .sidebar-toggle-btn {
-    background: none;
-    border: none;
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-    color: #524a3e;
-  }
+  width: 100%;
+  background-color: var(--banner-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  height: 25px;
+  border-bottom: 1px solid var(--border-color);
+}
 
-  .sidebar-toggle-btn:hover {
-    background-color: #f1f5f9;
-    color: #333;
-  }
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
 
-  .sidebar-toggle-btn:active {
-    background-color: #e2e8f0;
-  }
+.logo {
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
+}
+
+.greeting {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  color: var(--text-primary);
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: var(--hover-color);
+  color: var(--sb-hover-color);
+}

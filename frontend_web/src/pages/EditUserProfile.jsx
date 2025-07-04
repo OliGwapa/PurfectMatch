@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useNotifications } from '../hooks/useNotifications';
 import "../styles/EditUserProfile.css";
+import Button from '../components/Button';
 import defaultProfilePic from '../assets/defaultprofileimage.png';
 
 export default function EditProfile() {
@@ -293,12 +294,12 @@ export default function EditProfile() {
                 />
               </div>
               <div className="form-actions">
-                <button type="submit" className="save-btn" disabled={loading || imageLoading}>
+                <Button type="submit" className="save-btn" disabled={loading || imageLoading}>
                   {loading ? 'Saving...' : 'Save Changes'}
-                </button>
-                <button type="button" className="cancel-btn" onClick={handleCancel} disabled={loading || imageLoading}>
+                </Button>
+                <Button type="button" className="cancel-btn" onClick={handleCancel} disabled={loading || imageLoading}>
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
           </div>

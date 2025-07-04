@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider, signInWithPopup } from "../firebase";
 import "../styles/Login.css";
+import Button from '../components/Button';
 import logo from "../assets/Logo1.png";
  
 // MUI imports
@@ -124,6 +125,11 @@ export default function Login() {
               name="email"
               type="email"
               placeholder="Enter your email"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+              }}
               value={formData.email}
               onChange={handleChange}
               fullWidth
@@ -136,6 +142,17 @@ export default function Login() {
               name="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+                '& input[type="password"]': {
+                  color: 'var(--text-primary)',
+                },
+                '& input[type="text"]': {
+                  color: 'var(--text-primary)',
+                },
+              }}
               value={formData.password}
               onChange={handleChange}
               fullWidth
@@ -149,7 +166,12 @@ export default function Login() {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
-                      
+                      sx={{
+                        color: 'var(--text-secondary)',
+                        '&:hover': {
+                          color: 'var(--text-primary)',
+                        },
+                      }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -167,19 +189,19 @@ export default function Login() {
               </a>
             </div>
  
-            <button type="submit" className="btn" disabled={loading}>
+            <Button type="submit" className="btn" disabled={loading}>
               {loading ? "Signing in..." : "Sign in"}
-            </button>
+            </Button>
           </form>
  
           <div className="google-signin">
-            <button
+            <Button
               onClick={handleGoogleSignIn}
               className="btn google-btn"
               disabled={loading}
             >
               {loading ? "Signing in..." : "Sign in with Google"}
-            </button>
+            </Button>
           </div>
  
           <p>

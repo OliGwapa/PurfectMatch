@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useNotifications } from '../hooks/useNotifications';
 import "../styles/Login.css";
+import Button from '../components/Button';
 import logo from "../assets/Logo1.png";
  
 // MUI
@@ -21,6 +23,7 @@ export default function Signup() {
     confirmPassword: "",
   });
  
+  const { confirm, alertSuccess, alertError } = useNotifications();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
@@ -91,10 +94,10 @@ export default function Signup() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Signup failed");
  
-      alert("Signup successful! Please log in.");
+      alertSuccess("Signup successful! Please log in.");
       navigate("/login");
     } catch (err) {
-      setError(err.message || "Failed to sign up. Please try again.");
+      alertError(err.message || "Failed to sign up. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -119,6 +122,11 @@ export default function Signup() {
           <form onSubmit={handleSubmit} className="login-form">
             <TextField
               placeholder="Enter first name"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+              }}
               name="firstName"
               type="text"
               value={formData.firstName}
@@ -131,6 +139,11 @@ export default function Signup() {
  
             <TextField
               placeholder="Enter last name"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+              }}
               name="lastName"
               type="text"
               value={formData.lastName}
@@ -143,6 +156,11 @@ export default function Signup() {
  
             <TextField
               placeholder="Enter email address"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+              }}
               name="email"
               type="email"
               value={formData.email}
@@ -155,6 +173,11 @@ export default function Signup() {
  
             <TextField
               placeholder="Enter phone number"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+              }}
               name="phone"
               type="tel"
               value={formData.phone}
@@ -167,6 +190,11 @@ export default function Signup() {
  
             <TextField
               placeholder="Enter address"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+              }}
               name="address"
               type="text"
               value={formData.address}
@@ -179,6 +207,17 @@ export default function Signup() {
  
             <TextField
               placeholder="Enter password"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+                '& input[type="password"]': {
+                  color: 'var(--text-primary)',
+                },
+                '& input[type="text"]': {
+                  color: 'var(--text-primary)',
+                },
+              }}
               name="password"
               type={showPassword ? "text" : "password"}
               value={formData.password}
@@ -194,6 +233,12 @@ export default function Signup() {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
+                      sx={{
+                        color: 'var(--text-secondary)',
+                        '&:hover': {
+                          color: 'var(--text-primary)',
+                        },
+                      }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -204,6 +249,17 @@ export default function Signup() {
  
             <TextField
               placeholder="Verify password"
+              sx={{
+                '& input::placeholder': {
+                  color: 'var(--text-secondary)',
+                },
+                '& input[type="password"]': {
+                  color: 'var(--text-primary)',
+                },
+                '& input[type="text"]': {
+                  color: 'var(--text-primary)',
+                },
+              }}
               name="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               value={formData.confirmPassword}
@@ -219,6 +275,12 @@ export default function Signup() {
                       onClick={handleClickShowConfirmPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
+                      sx={{
+                        color: 'var(--text-secondary)',
+                        '&:hover': {
+                          color: 'var(--text-primary)',
+                        },
+                      }}
                     >
                       {showConfirmPassword ? (
                         <VisibilityOff />
@@ -231,9 +293,9 @@ export default function Signup() {
               }}
             />
  
-            <button type="submit" className="btn" disabled={loading}>
+            <Button type="submit" className="btn" disabled={loading}>
               {loading ? "Signing up..." : "Sign up"}
-            </button>
+            </Button>
           </form>
  
           <p>

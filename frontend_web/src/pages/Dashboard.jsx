@@ -34,7 +34,6 @@ export default function Dashboard() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
   const [selectedPet, setSelectedPet] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,14 +41,6 @@ export default function Dashboard() {
   const observer = useRef(null);
   const loadMoreRef = useRef(null);
   const settingsRef = useRef(null);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -179,7 +170,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
   );
 
   return (
-    <div className={`home-wrapper ${darkMode ? 'dark' : ''}`}>
+    <div className="home-wrapper">
       <Banner firstName={userDetails.fullName.split(' ')[0]} />
 
       <div className="main-content">
@@ -201,23 +192,23 @@ const fetchPets = useCallback(async (pageToFetch) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               label="Search pets by name, breed, or species..."
               sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                backgroundColor: 'var(--search-box)',
                 marginBottom: '20px',
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: '#7C715E',
+                    borderColor: 'var(--text-muted)',
                   },
                   '&:hover fieldset': {
-                    borderColor: '#7C715E',
+                    borderColor: 'var(--text-muted)',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#7C715E',
+                    borderColor: 'var(--text-muted)',
                   },
                 },
                 '& .MuiInputLabel-root': {
-                  color: '#7C715E',
+                  color: 'var(--input-focus)',
                   '&.Mui-focused': {
-                    color: '#7C715E',
+                    color: 'var(--text-muted)',
                   },
                 },
               }}
@@ -241,7 +232,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
 
           {loading && !initialLoading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100px' }}>
-              <CircularProgress sx={{ color: '#E5D0AC' }} />
+              <CircularProgress sx={{ color: 'var(--text-primary)' }} />
             </Box>
           )}
 

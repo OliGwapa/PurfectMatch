@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import "../styles/UserProfile.css";
 import Banner from '../components/Banner';
+import Button from '../components/Button';
 import Sidebar from '../components/sidebar-c/Sidebar';
 import { Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';

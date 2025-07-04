@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/home.css';
-import Banner from '../../components/Banner';
+import Banner from '../../components/Banner-c/Banner';
 import { Home, Search, Bell, Mail, Settings, Plus, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';

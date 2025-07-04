@@ -4,7 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../styles/BookingCSS/BookingCalendar.css';
-import Banner from '../../components/Banner';
+import Banner from '../../components/Banner-c/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth'; // Optional, if you want logout

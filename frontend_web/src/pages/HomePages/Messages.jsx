@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs';
 import '../../styles/HomeCSS/Messages.css';
 import { ArrowLeft, UserPlus, Plus, Send, LogOut, User } from 'lucide-react';
 import logo from '../../assets/Logo1.png';
-import Banner from '../../components/Banner';
+import Banner from '../../components/Banner-c/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import "../../styles/HomeCSS/home.css";
-import Banner from '../../components/Banner';
+import Banner from '../../components/Banner-c/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 import PetModal from '../../components/PetModal';
 import FeedPetCard from '../../components/FeedPetCard';

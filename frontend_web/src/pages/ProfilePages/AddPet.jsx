@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import "../../styles/ProfileCSS/AddPet.css";
-import Banner from '../../components/Banner';
+import Banner from '../../components/Banner-c/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 import { Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

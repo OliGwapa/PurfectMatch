@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, MessageSquare, X, ChevronDown, ChevronUp } from 'lucide-react';
 import "./PetModal.css";
 import DocumentImage from './DocumentImage';
-import Button from './Button';
+import Button from "./Button-c/Button";
 import defaultProfile from '../assets/defaultprofileimage.png';
 
   const PetModal = ({ pet, onClose, onBook }) => {

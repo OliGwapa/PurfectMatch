@@ -4,7 +4,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useWebSocket } from '../useWebSocket';
 import NotificationPopup from './NotificationPopup';
-import Banner from '../../components/Banner';
+import Banner from '../../components/Banner-c/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 import { useAuth } from '../../hooks/useAuth';
 import '../../styles/HomeCSS/Notifications.css';

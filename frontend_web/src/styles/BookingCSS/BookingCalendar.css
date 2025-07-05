@@ -2,7 +2,7 @@
   max-width: 950px;
   margin: 0 auto 40px auto;
   padding: 30px;
-  background: var(--bg-last);
+  background: var(--bg-primary);
   color: var(--text-color);
   gap: 30px;
   border-radius: 12px;
@@ -22,6 +22,7 @@
   color: var(--text-primary);
   border-radius: 8px;
   padding: 10px;
+  margin-top: 30px;
 }
 
 .button-wrapper {
@@ -65,9 +66,9 @@
 
 /* Pending Bookings Section */
 .calendar-pending-bookings-section {
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid var(--text-secondary);
+  margin-top: 45px;
+  padding-top: 5px;
 }
 
 .calendar-section-title {
@@ -82,57 +83,6 @@
   font-style: italic;
   color: var(--text-color);
   font-size: 15px;
-}
-
-.calendar-pending-list {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.calendar-pending-item {
-  background-color: var(--card-bg) !important;
-  color: var(--text-secondary);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 15px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: #fff;
-  transition: box-shadow 0.2s ease;
-}
-
-.calendar-pending-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.booking-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.booking-date {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.booking-pet {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.booking-status {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
-  width: fit-content;
-  text-transform: uppercase;
 }
 
 .calendar-history-modal-container .booking-status {
@@ -229,6 +179,129 @@
 
 .calendar-history-table tr:hover {
   background-color: var(--hover-color);
+}
+
+/* Pending Bookings Section */
+.calendar-pending-bookings-section {
+  margin-bottom: 24px;
+}
+
+.calendar-section-title {
+  margin-bottom: 16px;
+}
+
+/* Column Headers */
+.calendar-pending-headers {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  gap: 16px;
+  padding: 12px 15px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px 8px 0 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+/* Pending List */
+.calendar-pending-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+
+/* Individual Pending Items */
+.calendar-pending-item {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  gap: 16px;
+  padding: 15px;
+  background-color: var(--card-bg, #fff);
+  border-bottom: 1px solid var(--border-color);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  align-items: center;
+}
+
+.calendar-pending-item:last-child {
+  border-bottom: none;
+}
+
+.calendar-pending-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--hover-bg, #f8f9fa);
+}
+
+/* Column Content Styling */
+.booking-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.booking-date {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.booking-pet {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.booking-status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  width: fit-content;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* No data message */
+.calendar-no-data {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  background-color: var(--card-bg, #fff);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .calendar-pending-headers,
+  .calendar-pending-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .calendar-pending-headers {
+    display: none; /* Hide headers on mobile */
+  }
+  
+  .calendar-pending-item {
+    padding: 12px;
+  }
+  
+  .booking-pet::before {
+    content: "Pet: ";
+    font-weight: 500;
+  }
+  
+  .booking-date::before {
+    content: "Date: ";
+    font-weight: 500;
+  }
 }
 
 /* Responsive layout */

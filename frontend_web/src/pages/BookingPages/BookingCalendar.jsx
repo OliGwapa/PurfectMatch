@@ -144,16 +144,27 @@ const BookingCalendar = () => {
               {pendingBookings.length === 0 ? (
                 <p className="calendar-no-data">No pending bookings.</p>
               ) : (
-                <ul className="calendar-pending-list">
-                  {pendingBookings.map(b => (
-                    <li key={b.bookingId} className="calendar-pending-item">
-                      <span className="booking-title">{b.title}</span>
-                      <span className="booking-date">{new Date(b.date).toLocaleString()}</span>
-                      <span className="booking-pet">Pet: {petNames[b.petId] || 'Loading...'}</span>
-                      <span className={`booking-status ${b.status.toLowerCase()}`}>{b.status}</span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  {/* Column Headers */}
+                  <div className="calendar-pending-headers">
+                    <div>Title</div>
+                    <div>Date</div>
+                    <div>Pet</div>
+                    <div>Status</div>
+                  </div>
+                  
+                  {/* Pending Items List */}
+                  <ul className="calendar-pending-list">
+                    {pendingBookings.map(b => (
+                      <li key={b.bookingId} className="calendar-pending-item">
+                        <span className="booking-title">{b.title}</span>
+                        <span className="booking-date">{new Date(b.date).toLocaleString()}</span>
+                        <span className="booking-pet">{petNames[b.petId] || 'Loading...'}</span>
+                        <span className={`booking-status ${b.status.toLowerCase()}`}>{b.status}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
             </div>
 

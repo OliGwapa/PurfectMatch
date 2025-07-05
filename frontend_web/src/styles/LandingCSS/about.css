@@ -77,6 +77,7 @@ body, html {
   min-height: 100%;
   width: 100%;
   overflow: hidden;
+  background-color: var(--bg-overlay2);
 }
 
 /* Background overlay */
@@ -89,7 +90,6 @@ body, html {
   background-image: url('/background.png');
   background-size: cover;
   background-position: center;
-  opacity: 0.2;
 }
 
 /* Logo Container Styling - similar to login page */
@@ -116,14 +116,14 @@ body, html {
 /* Right Section */
 .about-right {
   flex: 1;
-  background-color: #E5D0AC;
+  background-color: var(--banner-color2);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .about-box {
-  background: #fff;
+  background: var(--card-bg2);
   padding: 30px;
   border-radius: 25px;
   max-width: 400px;
@@ -133,12 +133,12 @@ body, html {
 
 .about-box h2 {
   font-size: 1.6rem;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 15px;
 }
 
 .about-box p {
-  color: #444;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   margin-bottom: 15px;
   line-height: 1.6;

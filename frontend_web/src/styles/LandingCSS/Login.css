@@ -33,7 +33,6 @@ body, html {
     background-image: url("../assets/background.png");
     background-size: cover;
     background-position: center;
-    opacity: 0.2;
 }
  
 /* Logo Container Styling */

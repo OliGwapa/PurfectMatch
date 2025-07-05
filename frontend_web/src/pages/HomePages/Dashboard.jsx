@@ -219,6 +219,9 @@ const fetchPets = useCallback(async (pageToFetch) => {
                   '&.Mui-focused fieldset': {
                     borderColor: 'var(--text-muted)',
                   },
+                  '& input': {
+                    color: 'var(--text-primary)',
+                  },
                 },
                 '& .MuiInputLabel-root': {
                   color: 'var(--input-focus)',

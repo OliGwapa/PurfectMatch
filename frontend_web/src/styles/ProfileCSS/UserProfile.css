@@ -10,8 +10,12 @@
 }
 
 .profile-container {
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 950px;
+  margin: 0 auto 40px auto;
+  padding: 30px;
+  gap: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .profile-header {

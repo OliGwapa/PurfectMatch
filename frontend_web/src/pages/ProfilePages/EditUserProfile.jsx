@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
 import "../../styles/ProfileCSS/EditUserProfile.css";
+import Banner from '../../components/Banner';
 import Button from '../../components/Button';
+import Sidebar from '../../components/sidebar-c/Sidebar';
 import defaultProfilePic from '../../assets/defaultprofileimage.png';
 
 export default function EditProfile() {
+  const { handleLogout } = useAuth();
   const { confirm, alertSuccess, alertError } = useNotifications();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -190,13 +194,22 @@ export default function EditProfile() {
     navigate("/profile");
   };
 
+  const handleSearchToggle = () => {
+    navigate('/dashboard');
+  };
+
   return (
     <div className="home-wrapper">
+      <Banner firstName={formData.firstName} />
+
       <div className="main-content">
-        <div className="editcenter-content">
+        <Sidebar activeItem="profile" onLogout={handleLogout} onSearchToggle={handleSearchToggle} />
+
+        <div className="center-content expanded">
           <div className="edit-profile-container">
             <h2>Edit Profile</h2>
             {error && <p className="error">{error}</p>}
+            
             <div className="profile-pic-section">
               <img
                 src={profileImage || defaultProfilePic}
@@ -206,61 +219,73 @@ export default function EditProfile() {
                   e.target.src = defaultProfilePic;
                 }}
               />
-              <label className="change-photo-btn">
-                {imageLoading ? 'Uploading...' : 'Change Photo'}
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png"
-                  onChange={handleImageChange}
-                  disabled={imageLoading}
-                  style={{ display: 'none' }}
-                />
-              </label>
+              <div>
+                <label className="change-photo-btn">
+                  {imageLoading ? 'Uploading...' : 'Change Photo'}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    onChange={handleImageChange}
+                    disabled={imageLoading}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+              </div>
             </div>
+
             <form onSubmit={handleSubmit} className="edit-profile-form">
-              <div className="form-group">
-                <label htmlFor="firstName">First Name*</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
+              {/* First Name and Last Name side by side */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="firstName">First Name*</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                />
+
+              {/* Email and Phone side by side */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="email">Email*</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    disabled // Typically email shouldn't be editable
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="phone">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="email">Email*</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  disabled // Typically email shouldn't be editable
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>
+
+              {/* Address on its own line */}
               <div className="form-group">
                 <label htmlFor="address">Address</label>
                 <input
@@ -271,34 +296,39 @@ export default function EditProfile() {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="password">New Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Leave blank to keep current"
-                />
+
+              {/* New Password and Confirm Password side by side */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="password">New Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Leave blank to keep current"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Only needed if changing password"
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Only needed if changing password"
-                />
-              </div>
+
               <div className="form-actions">
-                <Button type="submit" className="save-btn" disabled={loading || imageLoading}>
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </Button>
                 <Button type="button" className="cancel-btn" onClick={handleCancel} disabled={loading || imageLoading}>
                   Cancel
+                </Button>
+                <Button type="submit" className="save-btn" disabled={loading || imageLoading}>
+                  {loading ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </form>

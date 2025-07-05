@@ -63,46 +63,6 @@ html, body, #root {
   margin-bottom: 20px;
 }
 
-.feed-pet-card {
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: var(--shadow) !important;
-  transition: transform 0.2s;
-}
-
-.pet-card:hover {
-  transform: translateY(-2px);
-}
-
-.pet-image-container {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.pet-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.pet-info {
-  padding: 15px;
-}
-
-.pet-info h3 {
-  margin: 0 0 5px 0;
-  color: var(--text-muted);
-}
-
-.pet-info p {
-  margin: 4px 0;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
 .end-message {
   text-align: center;
 }

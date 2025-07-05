@@ -1,74 +1,87 @@
 import React from 'react';
-import { Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, Avatar, IconButton, Typography } from '@mui/material';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandMore from './ExpandMore';
 import defaultProfile from '../assets/defaultprofileimage.png';
+import './PetCard.css';
 
-export default function PetCard({ pet }) {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+const PetCard = ({ 
+  pet, 
+  onClick, 
+  variant = 'feed', // 'feed' or 'profile'
+  showActions = false,
+  onEdit,
+  onDelete
+}) => {
+  const handleClick = () => {
+    if (onClick) {
+      onClick(pet);
+    }
   };
 
-  // Calculate age from dateOfBirth
-  const calculateAge = (dateOfBirth) => {
-    if (!dateOfBirth) return 'Unknown';
-    const dob = new Date(dateOfBirth);
-    const today = new Date();
-    const years = today.getFullYear() - dob.getFullYear();
-    const months = today.getMonth() - dob.getMonth();
-    if (months < 0 || (months === 0 && today.getDate() < dob.getDate())) {
-      return years - 1;
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    if (onEdit) {
+      onEdit(pet.petId);
     }
-    return years;
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(pet.petId);
+    }
   };
 
   return (
-    <Card sx={{ maxWidth: 345, marginBottom: 3 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="pet-avatar">
-            {pet.name?.[0] || 'P'}
-          </Avatar>
-        }
-        title={pet.name || 'Unnamed Pet'}
-        subheader={`Age: ${calculateAge(pet.dateOfBirth)} | Gender: ${pet.gender || 'Unknown'}`}
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image={pet.photo || defaultProfile}
-        alt={pet.name || 'Pet'}
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          Breed: {pet.breed || 'Unknown'}<br />
-          Color: {pet.color || 'Unknown'}<br />
-          Weight: {pet.weight ? `${pet.weight} ${pet.weightUnit || 'kg'}` : 'Unknown'}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites"><FavoriteIcon /></IconButton>
-        <IconButton aria-label="share"><ShareIcon /></IconButton>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Description:</Typography>
-          <Typography paragraph>{pet.description || 'No description available'}</Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
+    <div 
+      className={`pet-card ${variant === 'profile' ? 'pet-card--profile' : 'pet-card--feed'}`} 
+      onClick={handleClick} 
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
+    >
+      <div className="pet-image-container">
+        <img 
+          src={pet.photoUrl || pet.photo || defaultProfile} 
+          alt={pet.name} 
+          className="pet-image" 
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = defaultProfile;
+          }}
+        />
+      </div>
+      <div className="pet-info">
+        <h3 className="pet-name">{pet.name}</h3>
+        {variant === 'feed' ? (
+          <>
+            <p className="pet-breed-species">{pet.species} - {pet.breed}</p>
+            {pet.description && <p className="pet-description">{pet.description}</p>}
+          </>
+        ) : (
+          <>
+            <div className="pet-details">
+              <span className="pet-breed">{pet.breed}</span>
+              {pet.species && <span className="pet-species"> • {pet.species}</span>}
+            </div>
+            {pet.age && <div className="pet-age">{pet.age} years old</div>}
+          </>
+        )}
+      </div>
+      {showActions && (
+        <div className="pet-actions">
+          <button
+            className="edit-pet-btn"
+            onClick={handleEdit}
+          >
+            Edit
+          </button>
+          <button
+            className="delete-pet-btn"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
   );
-}
+};
+
+export default PetCard;

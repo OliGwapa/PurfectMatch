@@ -4,6 +4,7 @@ import "../../styles/ProfileCSS/UserProfile.css";
 import Banner from '../../components/Banner';
 import Button from '../../components/Button';
 import Sidebar from '../../components/sidebar-c/Sidebar';
+import PetCard from '../../components/PetCard';
 import { Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useNotifications } from '../../hooks/useNotifications';
@@ -184,6 +185,10 @@ export default function UserProfile() {
     }
   };
 
+  const handleEditPet = (petId) => {
+    navigate(`/edit-pet/${petId}`);
+  };
+
   const handleSearchToggle = () => {
     navigate('/dashboard');
   };
@@ -245,40 +250,14 @@ export default function UserProfile() {
                 ) : userPets.length > 0 ? (
                   <div className="pets-grid">
                     {userPets.map((pet) => (
-                      <div key={pet.petId} className="pet-card">
-                        <div className="pet-image-container">
-                          <img
-                            src={pet.photo}
-                            alt={pet.name}
-                            className="pet-image"
-                            onError={(e) => {
-                              e.target.src = defaultProfile;
-                            }}
-                          />
-                        </div>
-                        <div className="pet-info">
-                          <h4 className="pet-name">{pet.name}</h4>
-                          <div className="pet-details">
-                            <span className="pet-breed">{pet.breed}</span>
-                            {pet.species && <span className="pet-species"> • {pet.species}</span>}
-                          </div>
-                          {pet.age && <div className="pet-age">{pet.age} years old</div>}
-                        </div>
-                        <div className="pet-actions">
-                          <button
-                            className="edit-pet-btn"
-                            onClick={() => navigate(`/edit-pet/${pet.petId}`)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="delete-pet-btn"
-                            onClick={() => handleDeletePet(pet.petId)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
+                      <PetCard
+                        key={pet.petId}
+                        pet={pet}
+                        variant="profile"
+                        showActions={true}
+                        onEdit={handleEditPet}
+                        onDelete={handleDeletePet}
+                      />
                     ))}
                   </div>
                 ) : (

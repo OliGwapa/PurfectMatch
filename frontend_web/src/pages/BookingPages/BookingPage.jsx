@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
 import axios from 'axios';
 import "../../components/PetModal.css";
 import Button from '../../components/Button';
-import { X, History } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useNotifications } from '../../hooks/useNotifications';
 
-const localizer = momentLocalizer(moment);
-
 const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
   const location = useLocation();
-  const { confirm, alertSuccess, alertError } = useNotifications();
+  const { alertSuccess, alertError } = useNotifications();
 
   const petId = propPetId || location.state?.petId || '';
   const petName = propPetName || location.state?.petName || 'Unknown Pet';
@@ -28,10 +24,6 @@ const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
   if (!petId) {
     return <p>No pet selected. Please go back and select a pet.</p>;
   }
-
-  useEffect(() => {
-    // This effect can be removed since we're not fetching bookings here anymore
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,8 +47,6 @@ const BookingPage = ({ petId: propPetId, petName: propPetName, onClose }) => {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/bookings`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      const created = res.data;
 
       setNewBooking({ petId, date: '', title: '', status: 'PENDING' });
 

@@ -4,7 +4,7 @@ import "../../styles/HomeCSS/home.css";
 import Banner from '../../components/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 import PetModal from '../../components/PetModal';
-import FeedPetCard from '../../components/FeedPetCard';
+import PetCard from '../../components/PetCard';
 import SkeletonCard from '../../components/SkeletonCard';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -246,7 +246,7 @@ const fetchPets = useCallback(async (pageToFetch) => {
                 ? filteredPets
                 : pets.filter(pet => pet.userId !== userDetails.userId)
               ).map((pet) => (
-                <FeedPetCard key={pet.petId} pet={pet} onClick={handlePetClick} />
+                <PetCard key={pet.petId} pet={pet} onClick={handlePetClick} variant="feed"/>
               ))
 
             )}

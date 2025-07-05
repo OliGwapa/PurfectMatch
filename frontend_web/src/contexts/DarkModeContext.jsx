@@ -11,15 +11,20 @@ export const useDarkMode = () => {
 };
 
 export const DarkModeProvider = ({ children }) => {
+  // Initialize state based on saved preference or system preference
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Always start with system preference
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) {
+      // User has a saved preference
+      return JSON.parse(saved);
+    }
+    // No saved preference, use system default
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
   const [isSystemPreference, setIsSystemPreference] = useState(() => {
-    // Check if user has manually set a preference
-    const saved = localStorage.getItem('darkMode');
-    return saved === null;
+    // If there's no saved preference, we're following system
+    return localStorage.getItem('darkMode') === null;
   });
 
   useEffect(() => {
@@ -40,15 +45,6 @@ export const DarkModeProvider = ({ children }) => {
       mediaQuery.removeEventListener('change', handleSystemThemeChange);
     };
   }, [isSystemPreference]);
-
-  useEffect(() => {
-    // Load saved preference on mount
-    const saved = localStorage.getItem('darkMode');
-    if (saved !== null) {
-      setIsDarkMode(JSON.parse(saved));
-      setIsSystemPreference(false);
-    }
-  }, []);
 
   useEffect(() => {
     // Apply theme to document

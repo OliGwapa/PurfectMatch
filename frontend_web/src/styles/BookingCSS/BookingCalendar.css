@@ -117,12 +117,12 @@
 
 .booking-date {
   font-size: 14px;
-  color: var(--text-color);
+  color: var(--text-secondary);
 }
 
 .booking-pet {
   font-size: 14px;
-  color: var(--text-color);
+  color: var(--text-secondary);
 }
 
 .booking-status {

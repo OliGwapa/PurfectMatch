@@ -7,6 +7,7 @@ import Button from '../../components/Button';
 import { X, History } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useNotifications } from '../../hooks/useNotifications';
 
 const localizer = momentLocalizer(moment);
 

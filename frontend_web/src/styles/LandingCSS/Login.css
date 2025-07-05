@@ -88,7 +88,6 @@ body, html {
 }
  
 .form-container p {
-    color: var(--text-secondary);
     font-size: 0.8rem;
     margin-bottom: 5px;
 }

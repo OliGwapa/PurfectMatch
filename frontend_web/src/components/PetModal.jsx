@@ -6,10 +6,10 @@ import DocumentImage from './DocumentImage';
 import Button from './Button';
 import defaultProfile from '../assets/defaultprofileimage.png';
 
-  const PetModal = ({ pet, onClose, onBook }) => {
-    const navigate = useNavigate();
-    const modalRef = useRef(null);
-    const [showFullDescription, setShowFullDescription] = useState(false);
+const PetModal = ({ pet, onClose, onBook }) => {
+  const navigate = useNavigate();
+  const modalRef = useRef(null);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,7 +32,6 @@ import defaultProfile from '../assets/defaultprofileimage.png';
       onClose();      
     }
   };
-
 
   const handleChat = () => {
     navigate(`/messages/${pet.userId}`);
@@ -67,7 +66,6 @@ import defaultProfile from '../assets/defaultprofileimage.png';
     <div className="modal-overlay">
       <div className="modal-content" ref={modalRef}>
         <div className="modal-header">
-          <h3>{pet.name}</h3>
           <button onClick={onClose} className="close-button">
             <X size={20} />
           </button>
@@ -82,6 +80,8 @@ import defaultProfile from '../assets/defaultprofileimage.png';
               className="modal-pet-image"
             />
           </div>
+
+          <div className="modal-pet-name"><h3>{pet.name}</h3></div>
           
           {/* Description Section with Read More */}
           <div className="description-section">
@@ -148,20 +148,10 @@ import defaultProfile from '../assets/defaultprofileimage.png';
         </div>
         
         <div className="modal-footer">
-          <Button 
-            variant="primary" 
-            onClick={handleBooking}
-            icon={<Calendar size={16} />}
-            className="book-button"
-          >
+          <Button onClick={handleBooking} icon={Calendar} className="book-button">
             Book
           </Button>
-          <Button 
-            variant="secondary" 
-            onClick={handleChat}
-            icon={<MessageSquare size={16} />}
-            className="chat-button"
-          >
+          <Button onClick={handleChat} icon={MessageSquare} className="chat-button">
             Chat with owner
           </Button>
         </div>

@@ -207,23 +207,23 @@ const fetchPets = useCallback(async (pageToFetch) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               label="Search pets by name, breed, or species..."
               sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                backgroundColor: 'var(--search-box)',
                 marginBottom: '20px',
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: '#7C715E',
+                    borderColor: 'var(--text-muted)',
                   },
                   '&:hover fieldset': {
-                    borderColor: '#7C715E',
+                    borderColor: 'var(--text-muted)',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#7C715E',
+                    borderColor: 'var(--text-muted)',
                   },
                 },
                 '& .MuiInputLabel-root': {
-                  color: '#7C715E',
+                  color: 'var(--input-focus)',
                   '&.Mui-focused': {
-                    color: '#7C715E',
+                    color: 'var(--text-muted)',
                   },
                 },
               }}

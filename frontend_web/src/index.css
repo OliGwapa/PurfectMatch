@@ -35,7 +35,7 @@
   
   /* Background overlay for images */
   --bg-overlay: rgba(255, 255, 255, 0.7);
-  --bg-overlay2: rgba(255, 255, 255, 0.6);
+  --bg-overlay2: rgba(255, 255, 255, 0);
 
   /* For search bar */
   --search-box: rgba(255, 255, 255, 0.5);

@@ -264,3 +264,11 @@
   border-radius: 6px;
   margin: 20px 0;
 }
+
+.delete-pet-btn {
+  color: white;
+}
+
+.edit-pet-btn{
+  color: white;
+}

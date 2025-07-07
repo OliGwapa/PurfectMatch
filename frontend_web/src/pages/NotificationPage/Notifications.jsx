@@ -8,12 +8,16 @@ import Banner from '../../components/Banner';
 import Sidebar from '../../components/sidebar-c/Sidebar';
 import { useAuth } from '../../hooks/useAuth';
 import '../../styles/HomeCSS/Notifications.css';
- 
+import { useNavigate } from 'react-router-dom';
+
 const Notifications = () => {
   const { handleLogout } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const firstName = localStorage.getItem("firstName") || '';
- 
+  const navigate = useNavigate();
+  const handleSearchToggle = () => {
+    navigate('/dashboard');
+  };
   const token = localStorage.getItem('token');
   let userId = null;
  
@@ -98,7 +102,7 @@ const Notifications = () => {
       <Banner firstName={firstName} />
  
       <div className="main-content">
-        <Sidebar activeItem="notifications" onLogout={handleLogout} />
+        <Sidebar activeItem="notifications" onLogout={handleLogout} onSearchToggle={handleSearchToggle}/>
  
         <div className="center-content">
           <div className="notifications-container">

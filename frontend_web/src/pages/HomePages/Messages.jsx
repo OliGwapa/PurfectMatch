@@ -27,6 +27,10 @@ export default function Messages() {
     navigate('/login');
   };
 
+  const handleSearchToggle = () => {
+    navigate('/dashboard');
+  };
+
   // Fetch user's threads
   useEffect(() => {
     if (!token) {
@@ -237,7 +241,7 @@ export default function Messages() {
     <div className="home-wrapper">
       <Banner />
       <div className="main-content">
-        <Sidebar activeItem="messages" onLogout={handleLogout} />
+        <Sidebar activeItem="messages" onLogout={handleLogout} onSearchToggle={handleSearchToggle} />
         <div className="center-content expanded">
           <div className="messages-inner-layout">
             {/* Chat Area Placeholder */}
